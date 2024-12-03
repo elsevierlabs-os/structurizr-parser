@@ -4,6 +4,6 @@
 # Dependencies
 node_modules/
 
-# Build output
-dist
-dist-types
+# Build output - include now so we can add dependencies from this repo
+#dist
+#dist-types
