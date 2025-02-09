@@ -609,5 +609,5 @@ class structurizrParser extends CstParser {
 }
 
 export const StructurizrParser = new structurizrParser();
-export const BaseStructurizrVisitor =
-  StructurizrParser.getBaseCstVisitorConstructor();
+export const BaseStructurizrVisitor = StructurizrParser.getBaseCstVisitorConstructor();
+export const BaseStructurizrVisitorWithDefaults = StructurizrParser.getBaseCstVisitorConstructorWithDefaults();

@@ -30,6 +30,7 @@ __export(src_exports, {
   BangInclude: () => BangInclude,
   BangIndentifiers: () => BangIndentifiers,
   BaseStructurizrVisitor: () => BaseStructurizrVisitor,
+  BaseStructurizrVisitorWithDefaults: () => BaseStructurizrVisitorWithDefaults,
   BlockComment: () => BlockComment,
   Bool: () => Bool,
   Branding: () => Branding,
@@ -1014,6 +1015,7 @@ var structurizrParser = class extends import_chevrotain2.CstParser {
 };
 var StructurizrParser = new structurizrParser();
 var BaseStructurizrVisitor = StructurizrParser.getBaseCstVisitorConstructor();
+var BaseStructurizrVisitorWithDefaults = StructurizrParser.getBaseCstVisitorConstructorWithDefaults();
 
 // src/stack.ts
 var Stack = class {
@@ -1765,6 +1767,7 @@ var RawInterpreter = new rawInterpreter();
   BangInclude,
   BangIndentifiers,
   BaseStructurizrVisitor,
+  BaseStructurizrVisitorWithDefaults,
   BlockComment,
   Bool,
   Branding,
