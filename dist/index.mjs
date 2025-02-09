@@ -902,6 +902,7 @@ var structurizrParser = class extends CstParser {
 };
 var StructurizrParser = new structurizrParser();
 var BaseStructurizrVisitor = StructurizrParser.getBaseCstVisitorConstructor();
+var BaseStructurizrVisitorWithDefaults = StructurizrParser.getBaseCstVisitorConstructorWithDefaults();
 
 // src/stack.ts
 var Stack = class {
@@ -1652,6 +1653,7 @@ export {
   BangInclude,
   BangIndentifiers,
   BaseStructurizrVisitor,
+  BaseStructurizrVisitorWithDefaults,
   BlockComment,
   Bool,
   Branding,
