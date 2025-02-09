@@ -2,12 +2,19 @@ import { BaseStructurizrVisitorWithDefaults } from "./Parser";
 
 class vsCodeVisitor extends BaseStructurizrVisitorWithDefaults {
 
-    c4result: any[];
+    c4result: any[] = [];
 
     constructor() {
         super();
         this.c4result = [];
         this.validateVisitor();
+    }
+
+    workspaceWrapper(node: any) {
+        this.c4result = [];
+        if (node.workspaceSection) {
+            this.visit(node.workspaceSection);
+        }
     }
 
     softwareSystemSection(ctx: any) {
