@@ -101,6 +101,7 @@ __export(src_exports, {
   Title: () => Title,
   Url: () => Url,
   Users: () => Users,
+  VSCodeVisitor: () => VSCodeVisitor,
   Value: () => Value,
   Views: () => Views,
   WhiteSpace: () => WhiteSpace,
@@ -1755,6 +1756,55 @@ function stripQuotes(str) {
   return str.replace(/^"(.+)"$/, "$1");
 }
 var RawInterpreter = new rawInterpreter();
+
+// src/VSCodeVisitor.ts
+var vsCodeVisitor = class extends BaseStructurizrVisitorWithDefaults {
+  c4result = [];
+  constructor() {
+    super();
+    this.c4result = [];
+    this.validateVisitor();
+  }
+  workspaceWrapper(node) {
+    this.c4result = [];
+    if (node.workspaceSection) {
+      this.visit(node.workspaceSection);
+    }
+  }
+  softwareSystemSection(ctx) {
+    console.log(`Visiting softwareSystemSection: ${ctx.softwareSystem[0].image}`);
+    this.c4result.push({ softwareSystem: ctx.stringLiteral[0] });
+    if (ctx.softwareSystemChildSection) {
+      this.visit(ctx.softwareSystemChildSection);
+    }
+  }
+  softwareSystemChildSection(ctx) {
+    if (ctx.containerSection) {
+      for (const ctr of ctx.containerSection) {
+        this.visit(ctr);
+      }
+    }
+  }
+  containerSection(ctx) {
+    console.log(`Visiting containerSection: ${ctx.container[0].image}`);
+    this.c4result.push({ container: ctx.stringLiteral[0] });
+    if (ctx.containerChildSection) {
+      this.visit(ctx.containerChildSection);
+    }
+  }
+  containerChildSection(ctx) {
+    if (ctx.componentSection) {
+      for (const com of ctx.componentSection) {
+        this.visit(com);
+      }
+    }
+  }
+  componentSection(ctx) {
+    console.log(`Visiting componentSection: ${ctx.component[0].image}`);
+    this.c4result.push({ component: ctx.stringLiteral[0] });
+  }
+};
+var VSCodeVisitor = new vsCodeVisitor();
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   Animation,
@@ -1838,6 +1888,7 @@ var RawInterpreter = new rawInterpreter();
   Title,
   Url,
   Users,
+  VSCodeVisitor,
   Value,
   Views,
   WhiteSpace,

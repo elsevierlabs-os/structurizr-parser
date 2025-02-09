@@ -1204,4 +1204,16 @@ declare class rawInterpreter extends BaseStructurizrVisitor {
 }
 declare const RawInterpreter: rawInterpreter;
 
-export { Animation, AutoLayout, Background, BangAdrs, BangConstant, BangDocs, BangImpliedRelationships, BangInclude, BangIndentifiers, BaseStructurizrVisitor, BaseStructurizrVisitorWithDefaults, BlockComment, Bool, Branding, Color, Colour, Component, Configuration, Container, ContainerInstance, Custom, Deployment, DeploymentEnvironment, DeploymentGroup, DeploymentNode, Description, Dynamic, Element, Enterprise, Equals, Extends, FilePath, Filtered, Float, FontSize, Group, HashComment, HexColor, Identifier, Image, Include, InfrastructureNode, Int, LBrace, LineComment, Model, Name, Opacity, Person, Properties, RBrace, RawInterpreter, RelatedTo, Relationship, Shape, ShapeEnum, SoftwareSystem, SoftwareSystemInstance, StringLiteral, StructurizrDescription, StructurizrEnterpriseBoundary, StructurizrGroupSeparator, StructurizrGroups, StructurizrLexer, StructurizrLocale, StructurizrMetadata, StructurizrParser, StructurizrSoftwareSystemBoundaries, StructurizrSort, StructurizrTimezone, StructurizrTitle, StructurizrTooltips, Styles, SystemContext, SystemLandscape, Terminology, Theme, Themes, Title, Url, Users, Value, Views, WhiteSpace, Wildcard, Word, Workspace, allTokens };
+declare class vsCodeVisitor extends BaseStructurizrVisitorWithDefaults {
+    c4result: any[];
+    constructor();
+    workspaceWrapper(node: any): void;
+    softwareSystemSection(ctx: any): void;
+    softwareSystemChildSection(ctx: any): void;
+    containerSection(ctx: any): void;
+    containerChildSection(ctx: any): void;
+    componentSection(ctx: any): void;
+}
+declare const VSCodeVisitor: vsCodeVisitor;
+
+export { Animation, AutoLayout, Background, BangAdrs, BangConstant, BangDocs, BangImpliedRelationships, BangInclude, BangIndentifiers, BaseStructurizrVisitor, BaseStructurizrVisitorWithDefaults, BlockComment, Bool, Branding, Color, Colour, Component, Configuration, Container, ContainerInstance, Custom, Deployment, DeploymentEnvironment, DeploymentGroup, DeploymentNode, Description, Dynamic, Element, Enterprise, Equals, Extends, FilePath, Filtered, Float, FontSize, Group, HashComment, HexColor, Identifier, Image, Include, InfrastructureNode, Int, LBrace, LineComment, Model, Name, Opacity, Person, Properties, RBrace, RawInterpreter, RelatedTo, Relationship, Shape, ShapeEnum, SoftwareSystem, SoftwareSystemInstance, StringLiteral, StructurizrDescription, StructurizrEnterpriseBoundary, StructurizrGroupSeparator, StructurizrGroups, StructurizrLexer, StructurizrLocale, StructurizrMetadata, StructurizrParser, StructurizrSoftwareSystemBoundaries, StructurizrSort, StructurizrTimezone, StructurizrTitle, StructurizrTooltips, Styles, SystemContext, SystemLandscape, Terminology, Theme, Themes, Title, Url, Users, VSCodeVisitor, Value, Views, WhiteSpace, Wildcard, Word, Workspace, allTokens };
