@@ -74,4 +74,16 @@ describe('Testing StructurizrLexer', () => {
         expect(lexingResult).toBeDefined();
         expect(lexingResult.errors.length).toBe(0);        
     });
+
+    test('Can understand AI Generated DSL', async() => {
+        var dsl = await fsPromise.readFile('./tests/data/AI-generated.dsl', 'utf-8');
+        let lexingResult = StructurizrLexer.tokenize(dsl);
+        if (lexingResult){
+            let viz = new LexerVisualizer("AI-generated.dsl");
+            let htmlText = viz.createVisual(lexingResult);
+            await fsPromise.writeFile("./tests/diagrams/AI-generated.html", htmlText);
+        }
+        expect(lexingResult).toBeDefined();
+        expect(lexingResult.errors.length).toBe(0);        
+    });    
 });
