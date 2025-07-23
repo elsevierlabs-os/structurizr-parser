@@ -192,8 +192,24 @@ class rawInterpreter extends BaseStructurizrVisitor {
 
     softwareSystemChildSection(node: any, system: components["schemas"]["SoftwareSystem"]) {
         this._debug && console.log(`Here we are at softwareSystemChildSection with node: ${system.name}`);
+        if (node.descriptionAttribute) { this.visit(node.descriptionAttribute, system); }
+        if (node.tagsAttribute) { this.visit(node.tagsAttribute, system); }
         if (node.containerSection) { for (const ctr of node.containerSection) { this.visit(ctr, system); }}
     }
+
+    descriptionAttribute(node: any, system: components["schemas"]["SoftwareSystem"]) {
+        this._debug && console.log(`Here we are at descriptionAttribute with node: ${node.name}`);
+        const desc = stripQuotes(node.stringLiteral?.[0]?.image ?? "");
+        system.description = desc;
+    }
+
+    tagsAttribute(node: any, system: components["schemas"]["SoftwareSystem"]) {
+        this._debug && console.log(`Here we are at tagsAttribute with node: ${node.name}`);
+        for (const tag of node.stringLiteral) {
+            const newTag = stripQuotes(tag.image);
+            system.tags = system.tags ? `${system.tags},${newTag}` : newTag;
+        }
+    }   
 
     containerGroupSection(node: any) {
         this._debug && console.log(`Here we are at containerGroupSection with node: ${node.name}`);

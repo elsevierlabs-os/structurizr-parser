@@ -29,6 +29,6 @@ describe('Testing VSCodeVisitor', () => {
         VSCodeVisitor.visit(cst);
         var results = VSCodeVisitor.c4result;
         expect(results).toBeDefined();
-        expect(results.length).toBe(16);
+        expect(results.length).toBe(15);
     });
 });

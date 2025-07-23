@@ -50,6 +50,7 @@ export const InfrastructureNode = createToken({name: "infrastructureNodel", patt
 export const SoftwareSystemInstance = createToken({name: "softwareSystemInstance", pattern: /softwaresysteminstance/i });
 export const ContainerInstance = createToken({name: "containerInstance", pattern: /containerinstance/i });
 export const Element = createToken({name: "element", pattern: /element/i, longer_alt: Identifier  });
+export const Technology = createToken({name: "technology", pattern: /technology/i, longer_alt: Identifier });
 export const Tags = createToken({name: "tags", pattern: /tags/i, longer_alt: Identifier  });
 export const Tag = createToken({name: "tag", pattern: /tag/i, longer_alt: Tags  });
 export const Views = createToken({name: "views", pattern: /views/i, longer_alt: Identifier  });
@@ -165,6 +166,7 @@ export const allTokens = [
     DeploymentNode,
     InfrastructureNode,
     Element,
+    Technology,
     Tags,
     Tag,
     Views,

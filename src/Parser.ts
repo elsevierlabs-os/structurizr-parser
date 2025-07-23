@@ -1,5 +1,5 @@
 import { CstParser } from "chevrotain";
-import { Animation, AutoLayout, Background, Bool, Color, Colour, Component, Container, ContainerInstance, Deployment, DeploymentEnvironment, DeploymentNode, Description, Dynamic, Element, Equals, Extends, FilePath, FontSize, Group, HexColor, Identifier, Image, Include, Int, LBrace, Model, Name, Opacity, Person, Properties, RBrace, RelatedTo, Relationship, Shape, ShapeEnum, SoftwareSystem, SoftwareSystemInstance, StringLiteral, StructurizrDescription, StructurizrEnterpriseBoundary, StructurizrGroupSeparator, StructurizrGroups, StructurizrLocale, StructurizrMetadata, StructurizrSoftwareSystemBoundaries, StructurizrSort, StructurizrTimezone, StructurizrTitle, StructurizrTooltips, Styles, SystemContext, SystemLandscape, Title, Url, Value, Views, Wildcard, Word, Workspace, allTokens } from "./Lexer";
+import { Animation, AutoLayout, Background, Bool, Color, Colour, Component, Container, ContainerInstance, Deployment, DeploymentEnvironment, DeploymentNode, Description, Dynamic, Element, Equals, Extends, FilePath, FontSize, Group, HexColor, Identifier, Image, Include, Int, LBrace, Model, Name, Opacity, Person, Properties, RBrace, RelatedTo, Relationship, Shape, ShapeEnum, SoftwareSystem, SoftwareSystemInstance, StringLiteral, StructurizrDescription, StructurizrEnterpriseBoundary, StructurizrGroupSeparator, StructurizrGroups, StructurizrLocale, StructurizrMetadata, StructurizrSoftwareSystemBoundaries, StructurizrSort, StructurizrTimezone, StructurizrTitle, StructurizrTooltips, Styles, SystemContext, SystemLandscape, Tags, Title, Url, Value, Views, Wildcard, Word, Workspace, allTokens } from "./Lexer";
 
 // This class takes all the tokens identified and parses the DSL according to the rulesets defined by the Structurizr schema
 
@@ -151,6 +151,18 @@ class structurizrParser extends CstParser {
     this.CONSUME(RBrace);
   });
 
+  private descriptionAttribute = this.RULE("descriptionAttribute", () => {
+    this.CONSUME(Description);
+    this.CONSUME(StringLiteral);
+  });
+
+  private tagsAttribute = this.RULE("tagsAttribute", () => {
+    this.CONSUME(Tags);
+    this.AT_LEAST_ONE(() => {
+      this.CONSUME(StringLiteral);
+    });
+  });
+
   private personSection = this.RULE("personSection", () => {
     this.OPTION(() => {
         this.CONSUME(Identifier);
@@ -185,6 +197,8 @@ class structurizrParser extends CstParser {
     this.CONSUME1(LBrace);
     this.MANY(() => {
       this.OR([
+        {ALT: () => {this.SUBRULE(this.tagsAttribute)}},
+        {ALT: () => {this.SUBRULE(this.descriptionAttribute)}},
         {ALT: () => {this.SUBRULE(this.containerGroupSection)}},
         {ALT: () => {this.SUBRULE(this.containerSection)}},
         {ALT: () => {this.SUBRULE(this.implicitRelationship)}}

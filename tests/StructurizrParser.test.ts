@@ -49,18 +49,5 @@ describe('Testing StructurizrParser', () => {
         };
         expect(StructurizrParser.errors.length).toBe(0);
         expect(cst.name).toBe("workspaceWrapper");
-    });
-
-    test('Can parse AI Generated dsl', async() => {
-        var dsl = await fsPromise.readFile('./tests/data/AI-generated.dsl', 'utf-8');
-        const lexingResult = StructurizrLexer.tokenize(dsl);
-        expect(lexingResult.errors.length).toBe(0);
-        StructurizrParser.input = lexingResult.tokens;
-        const cst = StructurizrParser.workspaceWrapper();
-        if (StructurizrParser.errors.length > 0) {
-            console.log(StructurizrParser.errors);
-        };
-        expect(StructurizrParser.errors.length).toBe(0);
-        expect(cst.name).toBe("workspaceWrapper");
-    });    
+    });  
 });

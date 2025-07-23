@@ -776,6 +776,54 @@
   },
   {
     "type": "Rule",
+    "name": "descriptionAttribute",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "description",
+        "label": "description",
+        "idx": 0,
+        "pattern": "description"
+      },
+      {
+        "type": "Terminal",
+        "name": "stringLiteral",
+        "label": "stringLiteral",
+        "idx": 0,
+        "pattern": "\"(?:[^\"\\\\]|\\\\.)*\""
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "tagsAttribute",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "tags",
+        "label": "tags",
+        "idx": 0,
+        "pattern": "tags"
+      },
+      {
+        "type": "RepetitionMandatory",
+        "idx": 0,
+        "definition": [
+          {
+            "type": "Terminal",
+            "name": "stringLiteral",
+            "label": "stringLiteral",
+            "idx": 0,
+            "pattern": "\"(?:[^\"\\\\]|\\\\.)*\""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Rule",
     "name": "personSection",
     "orgText": "",
     "definition": [
@@ -926,6 +974,26 @@
             "type": "Alternation",
             "idx": 0,
             "definition": [
+              {
+                "type": "Alternative",
+                "definition": [
+                  {
+                    "type": "NonTerminal",
+                    "name": "tagsAttribute",
+                    "idx": 0
+                  }
+                ]
+              },
+              {
+                "type": "Alternative",
+                "definition": [
+                  {
+                    "type": "NonTerminal",
+                    "name": "descriptionAttribute",
+                    "idx": 0
+                  }
+                ]
+              },
               {
                 "type": "Alternative",
                 "definition": [
