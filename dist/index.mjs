@@ -30,6 +30,9 @@ var InfrastructureNode = createToken({ name: "infrastructureNodel", pattern: /in
 var SoftwareSystemInstance = createToken({ name: "softwareSystemInstance", pattern: /softwaresysteminstance/i });
 var ContainerInstance = createToken({ name: "containerInstance", pattern: /containerinstance/i });
 var Element = createToken({ name: "element", pattern: /element/i, longer_alt: Identifier });
+var Technology = createToken({ name: "technology", pattern: /technology/i, longer_alt: Identifier });
+var Tags = createToken({ name: "tags", pattern: /tags/i, longer_alt: Identifier });
+var Tag = createToken({ name: "tag", pattern: /tag/i, longer_alt: Tags });
 var Views = createToken({ name: "views", pattern: /views/i, longer_alt: Identifier });
 var SystemLandscape = createToken({ name: "systemLandscape", pattern: /systemlandscape/i });
 var SystemContext = createToken({ name: "systemContext", pattern: /systemcontext/i });
@@ -125,6 +128,9 @@ var allTokens = [
   DeploymentNode,
   InfrastructureNode,
   Element,
+  Technology,
+  Tags,
+  Tag,
   Views,
   SystemLandscape,
   SystemContext,
@@ -352,6 +358,16 @@ var structurizrParser = class extends CstParser {
     });
     this.CONSUME(RBrace);
   });
+  descriptionAttribute = this.RULE("descriptionAttribute", () => {
+    this.CONSUME(Description);
+    this.CONSUME(StringLiteral);
+  });
+  tagsAttribute = this.RULE("tagsAttribute", () => {
+    this.CONSUME(Tags);
+    this.AT_LEAST_ONE(() => {
+      this.CONSUME(StringLiteral);
+    });
+  });
   personSection = this.RULE("personSection", () => {
     this.OPTION(() => {
       this.CONSUME(Identifier);
@@ -359,12 +375,29 @@ var structurizrParser = class extends CstParser {
     });
     this.CONSUME(Person);
     this.CONSUME(StringLiteral);
-    this.OPTION1(() => {
+    this.MANY(() => {
       this.CONSUME1(StringLiteral);
     });
-    this.OPTION2(() => {
-      this.CONSUME2(StringLiteral);
+    this.OPTION1(() => {
+      this.SUBRULE(this.personChildSection);
     });
+  });
+  personChildSection = this.RULE("personChildSection", () => {
+    this.CONSUME1(LBrace);
+    this.MANY(() => {
+      this.OR([
+        { ALT: () => {
+          this.SUBRULE(this.tagsAttribute);
+        } },
+        { ALT: () => {
+          this.SUBRULE(this.descriptionAttribute);
+        } },
+        { ALT: () => {
+          this.SUBRULE(this.implicitRelationship);
+        } }
+      ]);
+    });
+    this.CONSUME1(RBrace);
   });
   softwareSystemSection = this.RULE("softwareSystemSection", () => {
     this.OPTION(() => {
@@ -385,6 +418,12 @@ var structurizrParser = class extends CstParser {
     this.MANY(() => {
       this.OR([
         { ALT: () => {
+          this.SUBRULE(this.tagsAttribute);
+        } },
+        { ALT: () => {
+          this.SUBRULE(this.descriptionAttribute);
+        } },
+        { ALT: () => {
           this.SUBRULE(this.containerGroupSection);
         } },
         { ALT: () => {
@@ -394,7 +433,6 @@ var structurizrParser = class extends CstParser {
           this.SUBRULE(this.implicitRelationship);
         } }
       ]);
-      ;
     });
     this.CONSUME1(RBrace);
   });
@@ -1132,6 +1170,7 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
   }
   personSection(node) {
     this._debug && console.log("Here we are at personSection node:");
+    console.log(JSON.stringify(node, null, 2));
     const id = node.identifier[0].image;
     const name = stripQuotes(node.stringLiteral[0]?.image ?? "");
     const description = stripQuotes(node.stringLiteral[1]?.image ?? "");
@@ -1142,6 +1181,24 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     p.perspectives = [];
     p.relationships = [];
     this.workspace.model?.people?.push(p);
+    if (node.personChildSection) {
+      this.visit(node.personChildSection, p);
+    }
+  }
+  personChildSection(node, person) {
+    this._debug && console.log(`Here we are at personChildSection with node: ${node.name}`);
+    console.log(JSON.stringify(node, null, 2));
+    if (node.descriptionAttribute) {
+      this.visit(node.descriptionAttribute, person);
+    }
+    if (node.tagsAttribute) {
+      this.visit(node.tagsAttribute, person);
+    }
+    if (node.implicitRelationship) {
+      for (const rel of node.implicitRelationship) {
+        this.visit(rel, person);
+      }
+    }
   }
   softwareSystemSection(node) {
     this._debug && console.log("Here we are at softwareSystemSection node:");
@@ -1165,10 +1222,28 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
   }
   softwareSystemChildSection(node, system) {
     this._debug && console.log(`Here we are at softwareSystemChildSection with node: ${system.name}`);
+    if (node.descriptionAttribute) {
+      this.visit(node.descriptionAttribute, system);
+    }
+    if (node.tagsAttribute) {
+      this.visit(node.tagsAttribute, system);
+    }
     if (node.containerSection) {
       for (const ctr of node.containerSection) {
         this.visit(ctr, system);
       }
+    }
+  }
+  descriptionAttribute(node, system) {
+    this._debug && console.log(`Here we are at descriptionAttribute with node: ${node.name}`);
+    const desc = stripQuotes(node.stringLiteral?.[0]?.image ?? "");
+    system.description = desc;
+  }
+  tagsAttribute(node, system) {
+    this._debug && console.log(`Here we are at tagsAttribute with node: ${node.name}`);
+    for (const tag of node.stringLiteral) {
+      const newTag = stripQuotes(tag.image);
+      system.tags = system.tags ? `${system.tags},${newTag}` : newTag;
     }
   }
   containerGroupSection(node) {
@@ -1454,8 +1529,8 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
       this.workspace.views.systemContextViews = [];
     }
     const id = node.identifier[0].image ?? "";
-    const key = stripQuotes(node.stringLiteral[0]?.image ?? "");
-    const desc = stripQuotes(node.stringLiteral[1]?.image ?? "");
+    const key = stripQuotes(node.stringLiteral?.[0]?.image ?? "");
+    const desc = stripQuotes(node.stringLiteral?.[1]?.image ?? "");
     const cv = {};
     cv.softwareSystemId = id;
     cv.key = key;
@@ -1767,6 +1842,9 @@ export {
   Styles,
   SystemContext,
   SystemLandscape,
+  Tag,
+  Tags,
+  Technology,
   Terminology,
   Theme,
   Themes,
