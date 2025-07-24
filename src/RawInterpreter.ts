@@ -207,17 +207,17 @@ class rawInterpreter extends BaseStructurizrVisitor {
         if (node.containerSection) { for (const ctr of node.containerSection) { this.visit(ctr, system); }}
     }
 
-    descriptionAttribute(node: any, system: any) {
+    descriptionAttribute(node: any, entity: any) {
         this._debug && console.log(`Here we are at descriptionAttribute with node: ${node.name}`);
         const desc = stripQuotes(node.stringLiteral?.[0]?.image ?? "");
-        system.description = desc;
+        entity.description = desc;
     }
 
-    tagsAttribute(node: any, system: any) {
+    tagsAttribute(node: any, entity: any) {
         this._debug && console.log(`Here we are at tagsAttribute with node: ${node.name}`);
         for (const tag of node.stringLiteral) {
             const newTag = stripQuotes(tag.image);
-            system.tags = system.tags ? `${system.tags},${newTag}` : newTag;
+            entity.tags = entity.tags ? `${entity.tags},${newTag}` : newTag;
         }
     }   
 
