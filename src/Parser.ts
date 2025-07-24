@@ -170,12 +170,24 @@ class structurizrParser extends CstParser {
     });
     this.CONSUME(Person);
     this.CONSUME(StringLiteral);
-    this.OPTION1(() => {
+    this.MANY(() => {
         this.CONSUME1(StringLiteral);
     });
-    this.OPTION2(() => {
-        this.CONSUME2(StringLiteral);
+    this.OPTION1(() => {
+        this.SUBRULE(this.personChildSection);
     });
+  });
+
+  private personChildSection = this.RULE("personChildSection", () => {
+    this.CONSUME1(LBrace);
+    this.MANY(() => {
+      this.OR([
+        {ALT: () => {this.SUBRULE(this.tagsAttribute)}},
+        {ALT: () => {this.SUBRULE(this.descriptionAttribute)}},
+        {ALT: () => {this.SUBRULE(this.implicitRelationship)}}
+      ]);
+    });
+    this.CONSUME1(RBrace);
   });
 
   private softwareSystemSection = this.RULE("softwareSystemSection", () => {
@@ -203,7 +215,6 @@ class structurizrParser extends CstParser {
         {ALT: () => {this.SUBRULE(this.containerSection)}},
         {ALT: () => {this.SUBRULE(this.implicitRelationship)}}
       ]);
-        ;
     });
     this.CONSUME1(RBrace);
   });

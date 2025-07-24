@@ -1,7 +1,10 @@
 workspace {
 
     model {
-        user = person "User"
+        user = person "User" {
+            description "A user of the software system"
+            tags "Friendly"
+        }
         system = softwareSystem "Software System"
 
         user -> system "Uses"

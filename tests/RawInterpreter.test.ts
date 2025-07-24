@@ -52,4 +52,20 @@ describe('Testing RawInterpreter', () => {
         expect(c4wspace).toBeDefined();
         await fsPromise.writeFile("./tests/raw/groups.json", JSON.stringify(c4wspace));
     });
+
+    test('Can RAW interpret elsevier dsl', async() => {
+        var dsl = await fsPromise.readFile('./tests/data/elsevier.dsl', 'utf-8');
+        const lexingResult = StructurizrLexer.tokenize(dsl);
+        expect(lexingResult.errors.length).toBe(0);
+        StructurizrParser.input = lexingResult.tokens;
+        const cst = StructurizrParser.workspaceWrapper();
+        expect(StructurizrParser.errors.length).toBe(0);
+        expect(cst.name).toBe("workspaceWrapper");
+        const c4wspace = RawInterpreter.visit(cst) as components["schemas"]["Workspace"];
+        expect(c4wspace).toBeDefined();
+        expect(c4wspace.model?.people).toHaveLength(1);
+        expect(c4wspace.model?.softwareSystems).toHaveLength(1);
+        expect(c4wspace.views?.systemContextViews).toHaveLength(1);
+        await fsPromise.writeFile("./tests/raw/elsevier.json", JSON.stringify(c4wspace));
+    });    
 });

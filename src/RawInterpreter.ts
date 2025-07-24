@@ -160,6 +160,7 @@ class rawInterpreter extends BaseStructurizrVisitor {
 
     personSection(node: any) {
         this._debug && console.log('Here we are at personSection node:');
+        console.log(JSON.stringify(node, null, 2));        
         const id = node.identifier[0].image;
         const name = stripQuotes(node.stringLiteral[0]?.image ?? "");
         const description = stripQuotes(node.stringLiteral[1]?.image ?? "");
@@ -170,6 +171,15 @@ class rawInterpreter extends BaseStructurizrVisitor {
         p.perspectives = [];
         p.relationships = [];
         this.workspace.model?.people?.push(p);
+        if (node.personChildSection) { this.visit(node.personChildSection, p); }
+    }
+
+    personChildSection(node: any, person: components["schemas"]["Person"]) {
+        this._debug && console.log(`Here we are at personChildSection with node: ${node.name}`);
+        console.log(JSON.stringify(node, null, 2));
+        if (node.descriptionAttribute) { this.visit(node.descriptionAttribute, person); }
+        if (node.tagsAttribute) { this.visit(node.tagsAttribute, person); }
+        if (node.implicitRelationship) { for (const rel of node.implicitRelationship) { this.visit(rel, person); }}
     }
 
     softwareSystemSection(node: any) {
@@ -197,13 +207,13 @@ class rawInterpreter extends BaseStructurizrVisitor {
         if (node.containerSection) { for (const ctr of node.containerSection) { this.visit(ctr, system); }}
     }
 
-    descriptionAttribute(node: any, system: components["schemas"]["SoftwareSystem"]) {
+    descriptionAttribute(node: any, system: any) {
         this._debug && console.log(`Here we are at descriptionAttribute with node: ${node.name}`);
         const desc = stripQuotes(node.stringLiteral?.[0]?.image ?? "");
         system.description = desc;
     }
 
-    tagsAttribute(node: any, system: components["schemas"]["SoftwareSystem"]) {
+    tagsAttribute(node: any, system: any) {
         this._debug && console.log(`Here we are at tagsAttribute with node: ${node.name}`);
         for (const tag of node.stringLiteral) {
             const newTag = stripQuotes(tag.image);
@@ -424,8 +434,8 @@ class rawInterpreter extends BaseStructurizrVisitor {
         this._currentView = ViewType.SystemContext;
         if (!this.workspace.views?.systemContextViews) { this.workspace.views!.systemContextViews = []; }
         const id = node.identifier[0].image ?? "";
-        const key = stripQuotes(node.stringLiteral[0]?.image ?? "");
-        const desc = stripQuotes(node.stringLiteral[1]?.image ?? "");
+        const key = stripQuotes(node.stringLiteral?.[0]?.image ?? "");
+        const desc = stripQuotes(node.stringLiteral?.[1]?.image ?? "");
         const cv = {} as components["schemas"]["SystemContextView"];
         cv.softwareSystemId = id;
         cv.key = key;
