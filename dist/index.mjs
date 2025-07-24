@@ -1234,16 +1234,16 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
       }
     }
   }
-  descriptionAttribute(node, system) {
+  descriptionAttribute(node, entity) {
     this._debug && console.log(`Here we are at descriptionAttribute with node: ${node.name}`);
     const desc = stripQuotes(node.stringLiteral?.[0]?.image ?? "");
-    system.description = desc;
+    entity.description = desc;
   }
-  tagsAttribute(node, system) {
+  tagsAttribute(node, entity) {
     this._debug && console.log(`Here we are at tagsAttribute with node: ${node.name}`);
     for (const tag of node.stringLiteral) {
       const newTag = stripQuotes(tag.image);
-      system.tags = system.tags ? `${system.tags},${newTag}` : newTag;
+      entity.tags = entity.tags ? `${entity.tags},${newTag}` : newTag;
     }
   }
   containerGroupSection(node) {

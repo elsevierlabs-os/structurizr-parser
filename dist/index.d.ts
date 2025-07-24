@@ -1140,8 +1140,8 @@ declare class rawInterpreter extends BaseStructurizrVisitor {
     personChildSection(node: any, person: components["schemas"]["Person"]): void;
     softwareSystemSection(node: any): void;
     softwareSystemChildSection(node: any, system: components["schemas"]["SoftwareSystem"]): void;
-    descriptionAttribute(node: any, system: any): void;
-    tagsAttribute(node: any, system: any): void;
+    descriptionAttribute(node: any, entity: any): void;
+    tagsAttribute(node: any, entity: any): void;
     containerGroupSection(node: any): void;
     containerGroupChildSection(node: any): void;
     containerSection(node: any, system: components["schemas"]["SoftwareSystem"]): void;
