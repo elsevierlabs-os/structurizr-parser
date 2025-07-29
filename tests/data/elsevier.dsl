@@ -1,5 +1,7 @@
 workspace {
 
+    !impliedRelationships false
+
     model {
         user = person "User" {
             description "A user of the software system"

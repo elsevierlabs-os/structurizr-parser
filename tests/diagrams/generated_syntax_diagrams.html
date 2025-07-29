@@ -108,42 +108,71 @@
         "pattern": "\\{"
       },
       {
-        "type": "Option",
-        "idx": 1,
+        "type": "Repetition",
+        "idx": 0,
         "definition": [
           {
-            "type": "Terminal",
-            "name": "name",
-            "label": "name",
+            "type": "Alternation",
             "idx": 0,
-            "pattern": "name"
-          },
-          {
-            "type": "Terminal",
-            "name": "stringLiteral",
-            "label": "stringLiteral",
-            "idx": 1,
-            "pattern": "\"(?:[^\"\\\\]|\\\\.)*\""
-          }
-        ]
-      },
-      {
-        "type": "Option",
-        "idx": 2,
-        "definition": [
-          {
-            "type": "Terminal",
-            "name": "description",
-            "label": "description",
-            "idx": 0,
-            "pattern": "description"
-          },
-          {
-            "type": "Terminal",
-            "name": "stringLiteral",
-            "label": "stringLiteral",
-            "idx": 2,
-            "pattern": "\"(?:[^\"\\\\]|\\\\.)*\""
+            "definition": [
+              {
+                "type": "Alternative",
+                "definition": [
+                  {
+                    "type": "Terminal",
+                    "name": "name",
+                    "label": "name",
+                    "idx": 0,
+                    "pattern": "name"
+                  },
+                  {
+                    "type": "Terminal",
+                    "name": "stringLiteral",
+                    "label": "stringLiteral",
+                    "idx": 1,
+                    "pattern": "\"(?:[^\"\\\\]|\\\\.)*\""
+                  }
+                ]
+              },
+              {
+                "type": "Alternative",
+                "definition": [
+                  {
+                    "type": "Terminal",
+                    "name": "description",
+                    "label": "description",
+                    "idx": 0,
+                    "pattern": "description"
+                  },
+                  {
+                    "type": "Terminal",
+                    "name": "stringLiteral",
+                    "label": "stringLiteral",
+                    "idx": 2,
+                    "pattern": "\"(?:[^\"\\\\]|\\\\.)*\""
+                  }
+                ]
+              },
+              {
+                "type": "Alternative",
+                "definition": [
+                  {
+                    "type": "Terminal",
+                    "name": "bangImpliedRelationships",
+                    "label": "bangImpliedRelationships",
+                    "idx": 0,
+                    "pattern": "!impliedrelationships"
+                  },
+                  {
+                    "type": "Terminal",
+                    "name": "bool",
+                    "label": "bool",
+                    "idx": 0,
+                    "pattern": "(true|false)"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },

@@ -1,5 +1,5 @@
 import { CstParser } from "chevrotain";
-import { Animation, AutoLayout, Background, Bool, Color, Colour, Component, Container, ContainerInstance, Deployment, DeploymentEnvironment, DeploymentNode, Description, Dynamic, Element, Equals, Extends, FilePath, FontSize, Group, HexColor, Identifier, Image, Include, Int, LBrace, Model, Name, Opacity, Person, Properties, RBrace, RelatedTo, Relationship, Shape, ShapeEnum, SoftwareSystem, SoftwareSystemInstance, StringLiteral, StructurizrDescription, StructurizrEnterpriseBoundary, StructurizrGroupSeparator, StructurizrGroups, StructurizrLocale, StructurizrMetadata, StructurizrSoftwareSystemBoundaries, StructurizrSort, StructurizrTimezone, StructurizrTitle, StructurizrTooltips, Styles, SystemContext, SystemLandscape, Tags, Title, Url, Value, Views, Wildcard, Word, Workspace, allTokens } from "./Lexer";
+import { Animation, AutoLayout, Background, BangImpliedRelationships, Bool, Color, Colour, Component, Container, ContainerInstance, Deployment, DeploymentEnvironment, DeploymentNode, Description, Dynamic, Element, Equals, Extends, FilePath, FontSize, Group, HexColor, Identifier, Image, Include, Int, LBrace, Model, Name, Opacity, Person, Properties, RBrace, RelatedTo, Relationship, Shape, ShapeEnum, SoftwareSystem, SoftwareSystemInstance, StringLiteral, StructurizrDescription, StructurizrEnterpriseBoundary, StructurizrGroupSeparator, StructurizrGroups, StructurizrLocale, StructurizrMetadata, StructurizrSoftwareSystemBoundaries, StructurizrSort, StructurizrTimezone, StructurizrTitle, StructurizrTooltips, Styles, SystemContext, SystemLandscape, Tags, Title, Url, Value, Views, Wildcard, Word, Workspace, allTokens } from "./Lexer";
 
 // This class takes all the tokens identified and parses the DSL according to the rulesets defined by the Structurizr schema
 
@@ -24,8 +24,38 @@ class structurizrParser extends CstParser {
 
   private workspaceSection = this.RULE("workspaceSection", () => {
     this.CONSUME(LBrace);
-    this.OPTION1(() => { this.CONSUME(Name); this.CONSUME1(StringLiteral); });
-    this.OPTION2(() => { this.CONSUME(Description); this.CONSUME2(StringLiteral); });
+    const seen = { name: false, description: false, bang: false };
+    this.MANY(() => {
+      this.OR([
+        {
+          ALT: () => {
+            if (!seen.name) {
+              this.CONSUME(Name);
+              this.CONSUME1(StringLiteral);
+              seen.name = true;
+            }
+          }
+        },
+        {
+          ALT: () => {
+            if (!seen.description) {
+              this.CONSUME(Description);
+              this.CONSUME2(StringLiteral);
+              seen.description = true;
+            }
+          }
+        },
+        {
+          ALT: () => {
+            if (!seen.bang) {
+              this.CONSUME(BangImpliedRelationships);
+              this.CONSUME(Bool);
+              seen.bang = true;
+            }
+          }
+        }
+      ]);
+    });
     this.SUBRULE(this.modelSection);
     this.OPTION(() => {
       this.SUBRULE(this.viewsSection);

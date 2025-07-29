@@ -202,13 +202,37 @@ var structurizrParser = class extends CstParser {
   });
   workspaceSection = this.RULE("workspaceSection", () => {
     this.CONSUME(LBrace);
-    this.OPTION1(() => {
-      this.CONSUME(Name);
-      this.CONSUME1(StringLiteral);
-    });
-    this.OPTION2(() => {
-      this.CONSUME(Description);
-      this.CONSUME2(StringLiteral);
+    const seen = { name: false, description: false, bang: false };
+    this.MANY(() => {
+      this.OR([
+        {
+          ALT: () => {
+            if (!seen.name) {
+              this.CONSUME(Name);
+              this.CONSUME1(StringLiteral);
+              seen.name = true;
+            }
+          }
+        },
+        {
+          ALT: () => {
+            if (!seen.description) {
+              this.CONSUME(Description);
+              this.CONSUME2(StringLiteral);
+              seen.description = true;
+            }
+          }
+        },
+        {
+          ALT: () => {
+            if (!seen.bang) {
+              this.CONSUME(BangImpliedRelationships);
+              this.CONSUME(Bool);
+              seen.bang = true;
+            }
+          }
+        }
+      ]);
     });
     this.SUBRULE(this.modelSection);
     this.OPTION(() => {
