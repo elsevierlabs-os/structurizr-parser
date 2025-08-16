@@ -21,7 +21,7 @@ let lexingResult = StructurizrLexer.tokenize(dsl);
 
 ## Parser
 
-This takes the output of the Lexer (the set of tokens) and applies the structurizr DSL rules. This will result in a syntax tree that represents what was extracted from the tokens using the structurizr grammer asa guide. Any errors are also emitted.
+This takes the output of the Lexer (the set of tokens) and applies the structurizr DSL rules. This will result in a syntax tree that represents what was extracted from the tokens using the structurizr grammer as a guide. Any errors are also emitted.
 
 ```typescript
 StructurizrParser.input = lexingResult.tokens;
