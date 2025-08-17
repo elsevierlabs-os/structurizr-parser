@@ -17,6 +17,8 @@ workspace {
             include *
             autolayout lr
         }
+
+        theme https://c4-server-static-assets.develop.nonprod.scopus.elsevier.systems/theme.json
     }
     
 }

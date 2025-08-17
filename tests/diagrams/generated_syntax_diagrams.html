@@ -2064,6 +2064,16 @@
                     "idx": 0
                   }
                 ]
+              },
+              {
+                "type": "Alternative",
+                "definition": [
+                  {
+                    "type": "NonTerminal",
+                    "name": "themeSection",
+                    "idx": 0
+                  }
+                ]
               }
             ]
           }
@@ -2362,6 +2372,27 @@
         "label": "stringLiteral",
         "idx": 0,
         "pattern": "\"(?:[^\"\\\\]|\\\\.)*\""
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "themeSection",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "theme",
+        "label": "theme",
+        "idx": 0,
+        "pattern": "theme"
+      },
+      {
+        "type": "Terminal",
+        "name": "url",
+        "label": "url",
+        "idx": 0,
+        "pattern": "(https?:\\/\\/[^ ]*)"
       }
     ]
   },

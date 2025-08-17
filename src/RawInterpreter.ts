@@ -353,6 +353,7 @@ class rawInterpreter extends BaseStructurizrVisitor {
         if (node.stylesSection) { for (const style of node.stylesSection) { this.visit(style);} }
         if (node.dynamicSection) { for (const dyn of node.dynamicSection) { this.visit(dyn);} }
         if (node.deploymentSection) { for (const deployment of node.deploymentSection) { this.visit(deployment);} }
+        if (node.themeSection) { this.visit(node.themeSection); }
     }
 
     systemLandscapeView(node: any) {
@@ -472,6 +473,10 @@ class rawInterpreter extends BaseStructurizrVisitor {
         this._debug && console.log(`Here we are at deploymentSection with node: ${node.name}`);
         this._currentView = ViewType.Deployment;
         if (!this.workspace.views?.deploymentViews) { this.workspace.views!.deploymentViews = []; }
+    }
+
+    themeSection(node: any) {
+        this._debug && console.log(`Here we are at themeSection with node: ${node.name}`);
     }
 
     stylesSection(node: any) {

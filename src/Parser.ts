@@ -1,5 +1,5 @@
 import { CstParser } from "chevrotain";
-import { Animation, AutoLayout, Background, BangImpliedRelationships, Bool, Color, Colour, Component, Container, ContainerInstance, Deployment, DeploymentEnvironment, DeploymentNode, Description, Dynamic, Element, Equals, Extends, FilePath, FontSize, Group, HexColor, Identifier, Image, Include, Int, LBrace, Model, Name, Opacity, Person, Properties, RBrace, RelatedTo, Relationship, Shape, ShapeEnum, SoftwareSystem, SoftwareSystemInstance, StringLiteral, StructurizrDescription, StructurizrEnterpriseBoundary, StructurizrGroupSeparator, StructurizrGroups, StructurizrLocale, StructurizrMetadata, StructurizrSoftwareSystemBoundaries, StructurizrSort, StructurizrTimezone, StructurizrTitle, StructurizrTooltips, Styles, SystemContext, SystemLandscape, Tags, Title, Url, Value, Views, Wildcard, Word, Workspace, allTokens } from "./Lexer";
+import { Animation, AutoLayout, Background, BangImpliedRelationships, Bool, Color, Colour, Component, Container, ContainerInstance, Deployment, DeploymentEnvironment, DeploymentNode, Description, Dynamic, Element, Equals, Extends, FilePath, FontSize, Group, HexColor, Identifier, Image, Include, Int, LBrace, Model, Name, Opacity, Person, Properties, RBrace, RelatedTo, Relationship, Shape, ShapeEnum, SoftwareSystem, SoftwareSystemInstance, StringLiteral, StructurizrDescription, StructurizrEnterpriseBoundary, StructurizrGroupSeparator, StructurizrGroups, StructurizrLocale, StructurizrMetadata, StructurizrSoftwareSystemBoundaries, StructurizrSort, StructurizrTimezone, StructurizrTitle, StructurizrTooltips, Styles, SystemContext, SystemLandscape, Tags, Theme, Title, Url, Value, Views, Wildcard, Word, Workspace, allTokens } from "./Lexer";
 
 // This class takes all the tokens identified and parses the DSL according to the rulesets defined by the Structurizr schema
 
@@ -423,7 +423,8 @@ class structurizrParser extends CstParser {
         {ALT: () => {this.SUBRULE(this.imageSection)}},
         {ALT: () => {this.SUBRULE(this.stylesSection)}},
         {ALT: () => {this.SUBRULE(this.dynamicSection)}},
-        {ALT: () => {this.SUBRULE(this.deploymentSection)}}
+        {ALT: () => {this.SUBRULE(this.deploymentSection)}},
+        {ALT: () => {this.SUBRULE(this.themeSection)}}
       ]);
     });
     this.CONSUME1(RBrace);
@@ -480,6 +481,11 @@ class structurizrParser extends CstParser {
   private descriptionOptions = this.RULE("descriptionOptions", () => {
     this.CONSUME(Description);
     this.CONSUME(StringLiteral);
+  });
+
+  private themeSection = this.RULE("themeSection", () => {
+    this.CONSUME(Theme);
+    this.CONSUME(Url);
   });
 
   private propertiesOptions = this.RULE("propertiesOptions", () => {
