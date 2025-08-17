@@ -138,6 +138,7 @@ declare class structurizrParser extends CstParser {
     private autoLayoutOptions;
     private animationOptions;
     private descriptionOptions;
+    private themeSection;
     private propertiesOptions;
     private systemContextView;
     private containerView;
@@ -1172,6 +1173,7 @@ declare class rawInterpreter extends BaseStructurizrVisitor {
     imageSection(node: any): void;
     dynamicSection(node: any): void;
     deploymentSection(node: any): void;
+    themeSection(node: any): void;
     stylesSection(node: any): void;
     elementStyleSection(node: any): void;
     relationshipStyleSection(node: any): void;

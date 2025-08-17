@@ -779,6 +779,9 @@ var structurizrParser = class extends import_chevrotain2.CstParser {
         } },
         { ALT: () => {
           this.SUBRULE(this.deploymentSection);
+        } },
+        { ALT: () => {
+          this.SUBRULE(this.themeSection);
         } }
       ]);
     });
@@ -849,6 +852,10 @@ var structurizrParser = class extends import_chevrotain2.CstParser {
   descriptionOptions = this.RULE("descriptionOptions", () => {
     this.CONSUME(Description);
     this.CONSUME(StringLiteral);
+  });
+  themeSection = this.RULE("themeSection", () => {
+    this.CONSUME(Theme);
+    this.CONSUME(Url);
   });
   propertiesOptions = this.RULE("propertiesOptions", () => {
     this.CONSUME(Properties);
@@ -1546,6 +1553,9 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
         this.visit(deployment);
       }
     }
+    if (node.themeSection) {
+      this.visit(node.themeSection);
+    }
   }
   systemLandscapeView(node) {
     this._debug && console.log(`Here we are at systemLandscapeView with node: ${node.name}`);
@@ -1715,6 +1725,9 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     if (!this.workspace.views?.deploymentViews) {
       this.workspace.views.deploymentViews = [];
     }
+  }
+  themeSection(node) {
+    this._debug && console.log(`Here we are at themeSection with node: ${node.name}`);
   }
   stylesSection(node) {
     this._debug && console.log(`Here we are at stylesSection with node: ${node.name}`);
