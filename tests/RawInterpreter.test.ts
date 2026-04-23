@@ -21,6 +21,24 @@ describe('Testing RawInterpreter', () => {
         await fsPromise.writeFile("./tests/raw/getting-started.json", JSON.stringify(c4wspace));
     });
 
+    test('Can RAW interpret getting started with properties dsl', async() => {
+        var dsl = await fsPromise.readFile('./tests/data/getting-started-properties.dsl', 'utf-8');
+        const lexingResult = StructurizrLexer.tokenize(dsl);
+        expect(lexingResult.errors.length).toBe(0);
+        StructurizrParser.input = lexingResult.tokens;
+        const cst = StructurizrParser.workspaceWrapper();
+        expect(StructurizrParser.errors.length).toBe(0);
+        expect(cst.name).toBe("workspaceWrapper");
+        const c4wspace = RawInterpreter.visit(cst) as components["schemas"]["Workspace"];
+        expect(c4wspace).toBeDefined();
+        expect(c4wspace.model?.people).toHaveLength(1);
+        expect(c4wspace.model?.softwareSystems).toHaveLength(1);
+        expect(c4wspace.views?.systemContextViews).toHaveLength(1);
+        expect(c4wspace.properties).toBeDefined();
+        expect(c4wspace.properties?.["localWorkspaceId"]).toBe("34");
+        await fsPromise.writeFile("./tests/raw/getting-started-properties.json", JSON.stringify(c4wspace));
+    });
+
     test('Can RAW interpret NESTED relationships', async () => {
         var dsl = await fsPromise.readFile('./tests/data/nested.dsl', 'utf-8');
         const lexingResult = StructurizrLexer.tokenize(dsl);
