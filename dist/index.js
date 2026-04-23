@@ -65,6 +65,7 @@ __export(src_exports, {
   Int: () => Int,
   LBrace: () => LBrace,
   LineComment: () => LineComment,
+  LocalWorkspaceId: () => LocalWorkspaceId,
   Model: () => Model,
   Name: () => Name,
   Opacity: () => Opacity,
@@ -179,6 +180,7 @@ var Colour = (0, import_chevrotain.createToken)({ name: "colour", pattern: /colo
 var ShapeEnum = (0, import_chevrotain.createToken)({ name: "shapeEnum", pattern: /Box|RoundedBox|Circle|Ellipse|Hexagon|Cylinder|Pipe|Person|Robot|Folder|WebBrowser|MobileDevicePortrait|MobileDeviceLandscape|Component/i, longer_alt: Identifier });
 var FontSize = (0, import_chevrotain.createToken)({ name: "fontSize", pattern: /fontsize/i, longer_alt: Identifier });
 var Opacity = (0, import_chevrotain.createToken)({ name: "opacity", pattern: /opacity/i, longer_alt: Identifier });
+var LocalWorkspaceId = (0, import_chevrotain.createToken)({ name: "localWorkspaceId", pattern: /"localWorkspaceId"|localWorkspaceId/i, longer_alt: Identifier });
 var StructurizrLocale = (0, import_chevrotain.createToken)({ name: "structurizrLocale", pattern: /"structurizr\.locale"|structurizr\.locale/i, longer_alt: Identifier });
 var StructurizrTimezone = (0, import_chevrotain.createToken)({ name: "structurizrTimezone", pattern: /"structurizr\.timezone"|structurizr\.timezone/i, longer_alt: Identifier });
 var StructurizrSort = (0, import_chevrotain.createToken)({ name: "structurizrSort", pattern: /"structurizr\.sort"|structurizr\.sort/i, longer_alt: Identifier });
@@ -1967,6 +1969,7 @@ var VSCodeVisitor = new vsCodeVisitor();
   Int,
   LBrace,
   LineComment,
+  LocalWorkspaceId,
   Model,
   Name,
   Opacity,

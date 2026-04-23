@@ -3,18 +3,33 @@ import { BaseStructurizrVisitorWithDefaults } from "./Parser";
 class vsCodeVisitor extends BaseStructurizrVisitorWithDefaults {
 
     c4result: any[] = [];
+    properties: any[] = [];
 
     constructor() {
         super();
         this.c4result = [];
+        this.properties = [];
         this.validateVisitor();
     }
 
     workspaceWrapper(node: any) {
         this.c4result = [];
+        this.properties = [];
         if (node.workspaceSection) {
             this.visit(node.workspaceSection);
         }
+    }
+
+    propertiesSection(ctx: any) {
+        console.log(`Visiting propertiesSection`);
+        if (ctx.localWorkspaceIdProperty) {
+            this.visit(ctx.localWorkspaceIdProperty);
+        }
+    }
+
+    localWorkspaceIdProperty(ctx: any) {
+        console.log(`Visiting localWorkspaceIdProperty: ${ctx.stringLiteral[0].image}`);
+        this.properties.push({ localWorkspaceId: ctx.stringLiteral[0] });
     }
 
     softwareSystemSection(ctx: any) {

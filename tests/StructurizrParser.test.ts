@@ -38,6 +38,19 @@ describe('Testing StructurizrParser', () => {
         expect(cst.name).toBe("workspaceWrapper");
     });
 
+    test('Can parse root properties in getting started dsl', async() => {
+        var dsl = await fsPromise.readFile('./tests/data/getting-started-properties.dsl', 'utf-8');
+        const lexingResult = StructurizrLexer.tokenize(dsl);
+        expect(lexingResult.errors.length).toBe(0);
+        StructurizrParser.input = lexingResult.tokens;
+        const cst = StructurizrParser.workspaceWrapper();
+        if (StructurizrParser.errors.length > 0) {
+            console.log(StructurizrParser.errors);
+        };
+        expect(StructurizrParser.errors.length).toBe(0);
+        expect(cst.name).toBe("workspaceWrapper");
+    });    
+
     test('Can parse Elsevier dsl', async() => {
         var dsl = await fsPromise.readFile('./tests/data/elsevier.dsl', 'utf-8');
         const lexingResult = StructurizrLexer.tokenize(dsl);

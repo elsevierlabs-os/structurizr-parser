@@ -89,6 +89,7 @@ class rawInterpreter extends BaseStructurizrVisitor {
         if (node.groupSeparatorProperty) { this.visit(node.groupSeparatorProperty); }
         if (node.groupsProperty) { this.visit(node.groupsProperty); }
         if (node.softwareSystemBoundariesProperty) { this.visit(node.softwareSystemBoundariesProperty); }
+        if (node.localWorkspaceIdProperty) { this.visit(node.localWorkspaceIdProperty); }
     }
 
     localeProperty(node: any) {
@@ -139,6 +140,15 @@ class rawInterpreter extends BaseStructurizrVisitor {
 
     softwareSystemBoundariesProperty(node: any) {
         this._debug && console.log('Here we are at softwareSystemBoundariesProperty node:');
+    }
+
+    localWorkspaceIdProperty(node: any) {
+        this._debug && console.log('Here we are at localWorkspaceIdProperty node:');
+        const value = stripQuotes(node.stringLiteral?.[0]?.image);
+        if (!this.workspace.properties){
+            this.workspace.properties = {};
+        }
+        this.workspace.properties["localWorkspaceId"] = value; 
     }
 
     systemGroupSection(node: any) {

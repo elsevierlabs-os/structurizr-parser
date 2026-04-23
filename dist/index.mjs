@@ -62,6 +62,7 @@ var Colour = createToken({ name: "colour", pattern: /colour/i, longer_alt: Ident
 var ShapeEnum = createToken({ name: "shapeEnum", pattern: /Box|RoundedBox|Circle|Ellipse|Hexagon|Cylinder|Pipe|Person|Robot|Folder|WebBrowser|MobileDevicePortrait|MobileDeviceLandscape|Component/i, longer_alt: Identifier });
 var FontSize = createToken({ name: "fontSize", pattern: /fontsize/i, longer_alt: Identifier });
 var Opacity = createToken({ name: "opacity", pattern: /opacity/i, longer_alt: Identifier });
+var LocalWorkspaceId = createToken({ name: "localWorkspaceId", pattern: /"localWorkspaceId"|localWorkspaceId/i, longer_alt: Identifier });
 var StructurizrLocale = createToken({ name: "structurizrLocale", pattern: /"structurizr\.locale"|structurizr\.locale/i, longer_alt: Identifier });
 var StructurizrTimezone = createToken({ name: "structurizrTimezone", pattern: /"structurizr\.timezone"|structurizr\.timezone/i, longer_alt: Identifier });
 var StructurizrSort = createToken({ name: "structurizrSort", pattern: /"structurizr\.sort"|structurizr\.sort/i, longer_alt: Identifier });
@@ -1849,6 +1850,7 @@ export {
   Int,
   LBrace,
   LineComment,
+  LocalWorkspaceId,
   Model,
   Name,
   Opacity,
