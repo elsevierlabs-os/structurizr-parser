@@ -2,6 +2,7 @@ import { BaseStructurizrVisitorWithDefaults } from "./Parser";
 
 class vsCodeVisitor extends BaseStructurizrVisitorWithDefaults {
 
+    private _debug:boolean = false;
     c4result: any[] = [];
     properties: any[] = [];
 
@@ -12,6 +13,10 @@ class vsCodeVisitor extends BaseStructurizrVisitorWithDefaults {
         this.validateVisitor();
     }
 
+    public set Debug(flag: boolean) {
+        this._debug = flag;
+    }    
+
     workspaceWrapper(node: any) {
         this.c4result = [];
         this.properties = [];
@@ -21,19 +26,19 @@ class vsCodeVisitor extends BaseStructurizrVisitorWithDefaults {
     }
 
     propertiesSection(ctx: any) {
-        console.log(`Visiting propertiesSection`);
+        this._debug && console.log(`Visiting propertiesSection`);
         if (ctx.localWorkspaceIdProperty) {
             this.visit(ctx.localWorkspaceIdProperty);
         }
     }
 
     localWorkspaceIdProperty(ctx: any) {
-        console.log(`Visiting localWorkspaceIdProperty: ${ctx.stringLiteral[0].image}`);
+        this._debug && console.log(`Visiting localWorkspaceIdProperty: ${ctx.stringLiteral[0].image}`);
         this.properties.push({ localWorkspaceId: ctx.stringLiteral[0] });
     }
 
     softwareSystemSection(ctx: any) {
-        console.log(`Visiting softwareSystemSection: ${ctx.softwareSystem[0].image}`);
+        this._debug && console.log(`Visiting softwareSystemSection: ${ctx.softwareSystem[0].image}`);
         this.c4result.push({ softwareSystem: ctx.stringLiteral[0] });
         if (ctx.softwareSystemChildSection) { this.visit(ctx.softwareSystemChildSection); }
     }
@@ -43,7 +48,7 @@ class vsCodeVisitor extends BaseStructurizrVisitorWithDefaults {
     }
 
     containerSection(ctx: any) {
-        console.log(`Visiting containerSection: ${ctx.container[0].image}`);
+        this._debug && console.log(`Visiting containerSection: ${ctx.container[0].image}`);
         this.c4result.push({ container: ctx.stringLiteral[0] });
         if (ctx.containerChildSection) { this.visit(ctx.containerChildSection); }
     }
@@ -53,7 +58,7 @@ class vsCodeVisitor extends BaseStructurizrVisitorWithDefaults {
     }
 
     componentSection(ctx: any) {
-        console.log(`Visiting componentSection: ${ctx.component[0].image}`);
+        this._debug && console.log(`Visiting componentSection: ${ctx.component[0].image}`);
         this.c4result.push({ component: ctx.stringLiteral[0] });
     }
 }
