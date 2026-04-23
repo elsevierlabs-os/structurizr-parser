@@ -105,6 +105,7 @@ var allTokens = [
   StructurizrGroupSeparator,
   StructurizrGroups,
   StructurizrSoftwareSystemBoundaries,
+  LocalWorkspaceId,
   StringLiteral,
   BangInclude,
   BangConstant,
@@ -235,8 +236,11 @@ var structurizrParser = class extends CstParser {
         }
       ]);
     });
-    this.SUBRULE(this.modelSection);
     this.OPTION(() => {
+      this.SUBRULE(this.propertiesSection);
+    });
+    this.SUBRULE(this.modelSection);
+    this.OPTION1(() => {
       this.SUBRULE(this.viewsSection);
     });
     this.CONSUME(RBrace);
@@ -308,6 +312,9 @@ var structurizrParser = class extends CstParser {
         } },
         { ALT: () => {
           this.SUBRULE(this.softwareSystemBoundariesProperty);
+        } },
+        { ALT: () => {
+          this.SUBRULE(this.localWorkspaceIdProperty);
         } }
       ]);
     });
@@ -356,6 +363,10 @@ var structurizrParser = class extends CstParser {
   softwareSystemBoundariesProperty = this.RULE("softwareSystemBoundariesProperty", () => {
     this.CONSUME(StructurizrSoftwareSystemBoundaries);
     this.CONSUME(Bool);
+  });
+  localWorkspaceIdProperty = this.RULE("localWorkspaceIdProperty", () => {
+    this.CONSUME(LocalWorkspaceId);
+    this.CONSUME(StringLiteral);
   });
   systemGroupSection = this.RULE("systemGroupSection", () => {
     this.OPTION(() => {
@@ -1047,6 +1058,9 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
       this.workspace.description = node.stringLiteral[1]?.image;
     }
     ;
+    if (node.propertiesSection) {
+      this.visit(node.propertiesSection);
+    }
     if (node.modelSection) {
       this.visit(node.modelSection);
     }
@@ -1133,6 +1147,9 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     if (node.softwareSystemBoundariesProperty) {
       this.visit(node.softwareSystemBoundariesProperty);
     }
+    if (node.localWorkspaceIdProperty) {
+      this.visit(node.localWorkspaceIdProperty);
+    }
   }
   localeProperty(node) {
     this._debug && console.log("Here we are at localeProperty node:");
@@ -1172,6 +1189,14 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
   }
   softwareSystemBoundariesProperty(node) {
     this._debug && console.log("Here we are at softwareSystemBoundariesProperty node:");
+  }
+  localWorkspaceIdProperty(node) {
+    this._debug && console.log("Here we are at localWorkspaceIdProperty node:");
+    const value = stripQuotes(node.stringLiteral?.[0]?.image);
+    if (!this.workspace.properties) {
+      this.workspace.properties = {};
+    }
+    this.workspace.properties["localWorkspaceId"] = value;
   }
   systemGroupSection(node) {
     this._debug && console.log("Here we are at systemGroupSection node:");
@@ -1759,16 +1784,29 @@ var RawInterpreter = new rawInterpreter();
 // src/VSCodeVisitor.ts
 var vsCodeVisitor = class extends BaseStructurizrVisitorWithDefaults {
   c4result = [];
+  properties = [];
   constructor() {
     super();
     this.c4result = [];
+    this.properties = [];
     this.validateVisitor();
   }
   workspaceWrapper(node) {
     this.c4result = [];
+    this.properties = [];
     if (node.workspaceSection) {
       this.visit(node.workspaceSection);
     }
+  }
+  propertiesSection(ctx) {
+    console.log(`Visiting propertiesSection`);
+    if (ctx.localWorkspaceIdProperty) {
+      this.visit(ctx.localWorkspaceIdProperty);
+    }
+  }
+  localWorkspaceIdProperty(ctx) {
+    console.log(`Visiting localWorkspaceIdProperty: ${ctx.stringLiteral[0].image}`);
+    this.properties.push({ localWorkspaceId: ctx.stringLiteral[0] });
   }
   softwareSystemSection(ctx) {
     console.log(`Visiting softwareSystemSection: ${ctx.softwareSystem[0].image}`);
