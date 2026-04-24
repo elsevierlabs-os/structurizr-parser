@@ -82,6 +82,7 @@ export const Colour = createToken({name: "colour", pattern: /colour/i, longer_al
 export const ShapeEnum = createToken({name: "shapeEnum", pattern: /Box|RoundedBox|Circle|Ellipse|Hexagon|Cylinder|Pipe|Person|Robot|Folder|WebBrowser|MobileDevicePortrait|MobileDeviceLandscape|Component/i, longer_alt:Identifier});
 export const FontSize = createToken({name: "fontSize", pattern: /fontsize/i, longer_alt: Identifier});
 export const Opacity = createToken({name:"opacity", pattern: /opacity/i, longer_alt: Identifier});
+export const LocalWorkspaceId = createToken({name: "localWorkspaceId", pattern: /"localWorkspaceId"|localWorkspaceId/i, longer_alt: Identifier });
 export const StructurizrLocale = createToken({name: "structurizrLocale", pattern: /"structurizr\.locale"|structurizr\.locale/i, longer_alt: Identifier });
 export const StructurizrTimezone = createToken({name: "structurizrTimezone", pattern: /"structurizr\.timezone"|structurizr\.timezone/i, longer_alt: Identifier });
 export const StructurizrSort = createToken({name: "structurizrSort", pattern: /"structurizr\.sort"|structurizr\.sort/i, longer_alt: Identifier });
@@ -140,6 +141,7 @@ export const allTokens = [
     StructurizrGroupSeparator,
     StructurizrGroups,
     StructurizrSoftwareSystemBoundaries,
+    LocalWorkspaceId,
 
     StringLiteral,
 

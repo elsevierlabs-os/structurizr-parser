@@ -44,6 +44,9 @@ class rawInterpreter extends BaseStructurizrVisitor {
         this._debug && console.log('Here we are at workspaceSection node:');
         if (node.name) { this.workspace.name = node.stringLiteral[0]?.image };
         if (node.description) { this.workspace.description = node.stringLiteral[1]?.image };
+        if (node.propertiesSection) {
+            this.visit(node.propertiesSection);
+        }
         if (node.modelSection) {
             this.visit(node.modelSection);
         }
@@ -89,6 +92,7 @@ class rawInterpreter extends BaseStructurizrVisitor {
         if (node.groupSeparatorProperty) { this.visit(node.groupSeparatorProperty); }
         if (node.groupsProperty) { this.visit(node.groupsProperty); }
         if (node.softwareSystemBoundariesProperty) { this.visit(node.softwareSystemBoundariesProperty); }
+        if (node.localWorkspaceIdProperty) { this.visit(node.localWorkspaceIdProperty); }
     }
 
     localeProperty(node: any) {
@@ -139,6 +143,15 @@ class rawInterpreter extends BaseStructurizrVisitor {
 
     softwareSystemBoundariesProperty(node: any) {
         this._debug && console.log('Here we are at softwareSystemBoundariesProperty node:');
+    }
+
+    localWorkspaceIdProperty(node: any) {
+        this._debug && console.log('Here we are at localWorkspaceIdProperty node:');
+        const value = stripQuotes(node.stringLiteral?.[0]?.image);
+        if (!this.workspace.properties){
+            this.workspace.properties = {} as components["schemas"]["Workspace"]["properties"];
+        }
+        this.workspace.properties!["localWorkspaceId"] = value; 
     }
 
     systemGroupSection(node: any) {

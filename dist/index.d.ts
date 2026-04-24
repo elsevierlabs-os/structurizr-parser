@@ -63,6 +63,7 @@ declare const Colour: chevrotain.TokenType;
 declare const ShapeEnum: chevrotain.TokenType;
 declare const FontSize: chevrotain.TokenType;
 declare const Opacity: chevrotain.TokenType;
+declare const LocalWorkspaceId: chevrotain.TokenType;
 declare const StructurizrLocale: chevrotain.TokenType;
 declare const StructurizrTimezone: chevrotain.TokenType;
 declare const StructurizrSort: chevrotain.TokenType;
@@ -107,6 +108,7 @@ declare class structurizrParser extends CstParser {
     private groupSeparatorProperty;
     private groupsProperty;
     private softwareSystemBoundariesProperty;
+    private localWorkspaceIdProperty;
     private systemGroupSection;
     private systemGroupChildSection;
     private descriptionAttribute;
@@ -1135,6 +1137,7 @@ declare class rawInterpreter extends BaseStructurizrVisitor {
     groupSeparatorProperty(node: any): void;
     groupsProperty(node: any): void;
     softwareSystemBoundariesProperty(node: any): void;
+    localWorkspaceIdProperty(node: any): void;
     systemGroupSection(node: any): void;
     systemGroupChildSection(node: any): void;
     personSection(node: any): void;
@@ -1217,8 +1220,11 @@ declare const RawInterpreter: rawInterpreter;
 
 declare class vsCodeVisitor extends BaseStructurizrVisitorWithDefaults {
     c4result: any[];
+    properties: any[];
     constructor();
     workspaceWrapper(node: any): void;
+    propertiesSection(ctx: any): void;
+    localWorkspaceIdProperty(ctx: any): void;
     softwareSystemSection(ctx: any): void;
     softwareSystemChildSection(ctx: any): void;
     containerSection(ctx: any): void;
@@ -1227,4 +1233,4 @@ declare class vsCodeVisitor extends BaseStructurizrVisitorWithDefaults {
 }
 declare const VSCodeVisitor: vsCodeVisitor;
 
-export { Animation, AutoLayout, Background, BangAdrs, BangConstant, BangDocs, BangImpliedRelationships, BangInclude, BangIndentifiers, BaseStructurizrVisitor, BaseStructurizrVisitorWithDefaults, BlockComment, Bool, Branding, Color, Colour, Component, Configuration, Container, ContainerInstance, Custom, Deployment, DeploymentEnvironment, DeploymentGroup, DeploymentNode, Description, Dynamic, Element, Enterprise, Equals, Extends, FilePath, Filtered, Float, FontSize, Group, HashComment, HexColor, Identifier, Image, Include, InfrastructureNode, Int, LBrace, LineComment, Model, Name, Opacity, Person, Properties, RBrace, RawInterpreter, RelatedTo, Relationship, Shape, ShapeEnum, SoftwareSystem, SoftwareSystemInstance, StringLiteral, StructurizrDescription, StructurizrEnterpriseBoundary, StructurizrGroupSeparator, StructurizrGroups, StructurizrLexer, StructurizrLocale, StructurizrMetadata, StructurizrParser, StructurizrSoftwareSystemBoundaries, StructurizrSort, StructurizrTimezone, StructurizrTitle, StructurizrTooltips, Styles, SystemContext, SystemLandscape, Tag, Tags, Technology, Terminology, Theme, Themes, Title, Url, Users, VSCodeVisitor, Value, Views, WhiteSpace, Wildcard, Word, Workspace, allTokens };
+export { Animation, AutoLayout, Background, BangAdrs, BangConstant, BangDocs, BangImpliedRelationships, BangInclude, BangIndentifiers, BaseStructurizrVisitor, BaseStructurizrVisitorWithDefaults, BlockComment, Bool, Branding, Color, Colour, Component, Configuration, Container, ContainerInstance, Custom, Deployment, DeploymentEnvironment, DeploymentGroup, DeploymentNode, Description, Dynamic, Element, Enterprise, Equals, Extends, FilePath, Filtered, Float, FontSize, Group, HashComment, HexColor, Identifier, Image, Include, InfrastructureNode, Int, LBrace, LineComment, LocalWorkspaceId, Model, Name, Opacity, Person, Properties, RBrace, RawInterpreter, RelatedTo, Relationship, Shape, ShapeEnum, SoftwareSystem, SoftwareSystemInstance, StringLiteral, StructurizrDescription, StructurizrEnterpriseBoundary, StructurizrGroupSeparator, StructurizrGroups, StructurizrLexer, StructurizrLocale, StructurizrMetadata, StructurizrParser, StructurizrSoftwareSystemBoundaries, StructurizrSort, StructurizrTimezone, StructurizrTitle, StructurizrTooltips, Styles, SystemContext, SystemLandscape, Tag, Tags, Technology, Terminology, Theme, Themes, Title, Url, Users, VSCodeVisitor, Value, Views, WhiteSpace, Wildcard, Word, Workspace, allTokens };

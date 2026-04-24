@@ -177,13 +177,24 @@
         ]
       },
       {
+        "type": "Option",
+        "idx": 0,
+        "definition": [
+          {
+            "type": "NonTerminal",
+            "name": "propertiesSection",
+            "idx": 0
+          }
+        ]
+      },
+      {
         "type": "NonTerminal",
         "name": "modelSection",
         "idx": 0
       },
       {
         "type": "Option",
-        "idx": 0,
+        "idx": 1,
         "definition": [
           {
             "type": "NonTerminal",
@@ -449,6 +460,16 @@
                     "idx": 0
                   }
                 ]
+              },
+              {
+                "type": "Alternative",
+                "definition": [
+                  {
+                    "type": "NonTerminal",
+                    "name": "localWorkspaceIdProperty",
+                    "idx": 0
+                  }
+                ]
               }
             ]
           }
@@ -691,6 +712,27 @@
         "label": "bool",
         "idx": 0,
         "pattern": "(true|false)"
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "localWorkspaceIdProperty",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "localWorkspaceId",
+        "label": "localWorkspaceId",
+        "idx": 0,
+        "pattern": "\"localWorkspaceId\"|localWorkspaceId"
+      },
+      {
+        "type": "Terminal",
+        "name": "stringLiteral",
+        "label": "stringLiteral",
+        "idx": 0,
+        "pattern": "\"(?:[^\"\\\\]|\\\\.)*\""
       }
     ]
   },

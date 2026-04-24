@@ -1,5 +1,5 @@
 import { CstParser } from "chevrotain";
-import { Animation, AutoLayout, Background, BangImpliedRelationships, Bool, Color, Colour, Component, Container, ContainerInstance, Deployment, DeploymentEnvironment, DeploymentNode, Description, Dynamic, Element, Equals, Extends, FilePath, FontSize, Group, HexColor, Identifier, Image, Include, Int, LBrace, Model, Name, Opacity, Person, Properties, RBrace, RelatedTo, Relationship, Shape, ShapeEnum, SoftwareSystem, SoftwareSystemInstance, StringLiteral, StructurizrDescription, StructurizrEnterpriseBoundary, StructurizrGroupSeparator, StructurizrGroups, StructurizrLocale, StructurizrMetadata, StructurizrSoftwareSystemBoundaries, StructurizrSort, StructurizrTimezone, StructurizrTitle, StructurizrTooltips, Styles, SystemContext, SystemLandscape, Tags, Theme, Title, Url, Value, Views, Wildcard, Word, Workspace, allTokens } from "./Lexer";
+import { Animation, AutoLayout, Background, BangImpliedRelationships, Bool, Color, Colour, Component, Container, ContainerInstance, Deployment, DeploymentEnvironment, DeploymentNode, Description, Dynamic, Element, Equals, Extends, FilePath, FontSize, Group, HexColor, Identifier, Image, Include, Int, LBrace, LocalWorkspaceId, Model, Name, Opacity, Person, Properties, RBrace, RelatedTo, Relationship, Shape, ShapeEnum, SoftwareSystem, SoftwareSystemInstance, StringLiteral, StructurizrDescription, StructurizrEnterpriseBoundary, StructurizrGroupSeparator, StructurizrGroups, StructurizrLocale, StructurizrMetadata, StructurizrSoftwareSystemBoundaries, StructurizrSort, StructurizrTimezone, StructurizrTitle, StructurizrTooltips, Styles, SystemContext, SystemLandscape, Tags, Theme, Title, Url, Value, Views, Wildcard, Word, Workspace, allTokens } from "./Lexer";
 
 // This class takes all the tokens identified and parses the DSL according to the rulesets defined by the Structurizr schema
 
@@ -56,8 +56,11 @@ class structurizrParser extends CstParser {
         }
       ]);
     });
-    this.SUBRULE(this.modelSection);
     this.OPTION(() => {
+      this.SUBRULE(this.propertiesSection);
+    });
+    this.SUBRULE(this.modelSection);
+    this.OPTION1(() => {
       this.SUBRULE(this.viewsSection);
     });
     this.CONSUME(RBrace);
@@ -98,7 +101,8 @@ class structurizrParser extends CstParser {
         {ALT: () => {this.SUBRULE(this.enterpriseBoundaryProperty)}},
         {ALT: () => {this.SUBRULE(this.groupSeparatorProperty)}},
         {ALT: () => {this.SUBRULE(this.groupsProperty)}},
-        {ALT: () => {this.SUBRULE(this.softwareSystemBoundariesProperty)}}
+        {ALT: () => {this.SUBRULE(this.softwareSystemBoundariesProperty)}},
+        {ALT: () => {this.SUBRULE(this.localWorkspaceIdProperty)}}
       ]);
     });
     this.CONSUME(RBrace);
@@ -157,6 +161,11 @@ class structurizrParser extends CstParser {
   private softwareSystemBoundariesProperty = this.RULE("softwareSystemBoundariesProperty", () => {
     this.CONSUME(StructurizrSoftwareSystemBoundaries); 
     this.CONSUME(Bool);
+  });
+
+  private localWorkspaceIdProperty = this.RULE("localWorkspaceIdProperty", () => {
+    this.CONSUME(LocalWorkspaceId); 
+    this.CONSUME(StringLiteral);
   });
 
   private systemGroupSection = this.RULE("systemGroupSection", () => {
