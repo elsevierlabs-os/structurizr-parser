@@ -73,5 +73,17 @@ describe('Testing StructurizrLexer', () => {
         }
         expect(lexingResult).toBeDefined();
         expect(lexingResult.errors.length).toBe(0);        
-    });   
+    });  
+    
+    test('Can scan shapes file', async() => {
+        var dsl = await fsPromise.readFile('./tests/data/shapes.dsl', 'utf-8');
+        let lexingResult = StructurizrLexer.tokenize(dsl);
+        if (lexingResult){
+            let viz = new LexerVisualizer("shapes.dsl");
+            let htmlText = viz.createVisual(lexingResult);
+            await fsPromise.writeFile("./tests/diagrams/shapes.html", htmlText);
+        }
+        expect(lexingResult).toBeDefined();
+        expect(lexingResult.errors.length).toBe(0);
+    });    
 });

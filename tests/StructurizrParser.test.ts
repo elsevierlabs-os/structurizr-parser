@@ -4,7 +4,7 @@ import { createSyntaxDiagramsCode } from 'chevrotain';
 import { StructurizrLexer } from '../src/Lexer';
 
 describe('Testing StructurizrParser', () => {
-    test('Can generate syntax diagrams', async() => {
+    test('Can generate syntax diagrams', async () => {
         const targetDir = './tests/diagrams/';
         const serializedGrammar = StructurizrParser.getSerializedGastProductions();
         const htmlText = createSyntaxDiagramsCode(serializedGrammar);
@@ -12,7 +12,7 @@ describe('Testing StructurizrParser', () => {
         expect(htmlText.length).toBeGreaterThan(0);
     });
 
-    test('Can parse getting started dsl', async() => {
+    test('Can parse getting started dsl', async () => {
         var dsl = await fsPromise.readFile('./tests/data/getting-started.dsl', 'utf-8');
         const lexingResult = StructurizrLexer.tokenize(dsl);
         expect(lexingResult.errors.length).toBe(0);
@@ -25,7 +25,7 @@ describe('Testing StructurizrParser', () => {
         expect(cst.name).toBe("workspaceWrapper");
     });
 
-    test('Can parse extension to getting started dsl', async() => {
+    test('Can parse extension to getting started dsl', async () => {
         var dsl = await fsPromise.readFile('./tests/data/getting-started-extended.dsl', 'utf-8');
         const lexingResult = StructurizrLexer.tokenize(dsl);
         expect(lexingResult.errors.length).toBe(0);
@@ -38,7 +38,7 @@ describe('Testing StructurizrParser', () => {
         expect(cst.name).toBe("workspaceWrapper");
     });
 
-    test('Can parse root properties in getting started dsl', async() => {
+    test('Can parse root properties in getting started dsl', async () => {
         var dsl = await fsPromise.readFile('./tests/data/getting-started-properties.dsl', 'utf-8');
         const lexingResult = StructurizrLexer.tokenize(dsl);
         expect(lexingResult.errors.length).toBe(0);
@@ -49,9 +49,9 @@ describe('Testing StructurizrParser', () => {
         };
         expect(StructurizrParser.errors.length).toBe(0);
         expect(cst.name).toBe("workspaceWrapper");
-    });    
+    });
 
-    test('Can parse Elsevier dsl', async() => {
+    test('Can parse Elsevier dsl', async () => {
         var dsl = await fsPromise.readFile('./tests/data/elsevier.dsl', 'utf-8');
         const lexingResult = StructurizrLexer.tokenize(dsl);
         expect(lexingResult.errors.length).toBe(0);
@@ -64,7 +64,28 @@ describe('Testing StructurizrParser', () => {
         expect(cst.name).toBe("workspaceWrapper");
     });
 
-    test('Can parse big bank dsl', async() => {
+    test('Can parse shapes dsl', async () => {
+        var dsl = await fsPromise.readFile('./tests/data/shapes.dsl', 'utf-8');
+        const lexingResult = StructurizrLexer.tokenize(dsl);
+        expect(lexingResult.errors.length).toBe(0);
+        StructurizrParser.input = lexingResult.tokens;
+        const cst = StructurizrParser.workspaceWrapper();
+        if (StructurizrParser.errors.length > 0) {
+            console.error(`Parser errors: ${StructurizrParser.errors.length}`);
+            StructurizrParser.errors.forEach((err, i) => {
+                console.error(
+                    `[${i + 1}] ${err.message} ` +
+                    `(token: ${err.token?.image ?? "N/A"}, ` +
+                    `line: ${err.token?.startLine ?? "?"}, ` +
+                    `col: ${err.token?.startColumn ?? "?"})`
+                );
+            });
+        }
+        expect(StructurizrParser.errors.length).toBe(0);
+        expect(cst.name).toBe("workspaceWrapper");
+    });
+
+    test('Can parse big bank dsl', async () => {
         var dsl = await fsPromise.readFile('./tests/data/big-bank-plc.dsl', 'utf-8');
         const lexingResult = StructurizrLexer.tokenize(dsl);
         expect(lexingResult.errors.length).toBe(0);
@@ -75,5 +96,5 @@ describe('Testing StructurizrParser', () => {
         };
         expect(StructurizrParser.errors.length).toBe(0);
         expect(cst.name).toBe("workspaceWrapper");
-    });  
+    });
 });

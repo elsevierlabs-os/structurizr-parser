@@ -82,6 +82,8 @@ export const Colour = createToken({name: "colour", pattern: /colour/i, longer_al
 export const ShapeEnum = createToken({name: "shapeEnum", pattern: /Box|RoundedBox|Circle|Ellipse|Hexagon|Cylinder|Pipe|Person|Robot|Folder|WebBrowser|MobileDevicePortrait|MobileDeviceLandscape|Component/i, longer_alt:Identifier});
 export const FontSize = createToken({name: "fontSize", pattern: /fontsize/i, longer_alt: Identifier});
 export const Opacity = createToken({name:"opacity", pattern: /opacity/i, longer_alt: Identifier});
+export const Stroke = createToken({name: "stroke", pattern: /stroke/i, longer_alt: Identifier});
+export const StrokeWidth = createToken({name: "strokeWidth", pattern: /strokeWidth/i, longer_alt: Identifier});
 export const LocalWorkspaceId = createToken({name: "localWorkspaceId", pattern: /"localWorkspaceId"|localWorkspaceId/i, longer_alt: Identifier });
 export const StructurizrLocale = createToken({name: "structurizrLocale", pattern: /"structurizr\.locale"|structurizr\.locale/i, longer_alt: Identifier });
 export const StructurizrTimezone = createToken({name: "structurizrTimezone", pattern: /"structurizr\.timezone"|structurizr\.timezone/i, longer_alt: Identifier });
@@ -94,6 +96,7 @@ export const StructurizrEnterpriseBoundary = createToken({name: "structurizrEnte
 export const StructurizrGroupSeparator = createToken({name: "structurizrGroupSeparator", pattern: /"structurizr\.groupSeparator"|structurizr\.groupSeparator/i, longer_alt: Identifier });
 export const StructurizrGroups = createToken({name: "structurizrGroups", pattern: /"structurizr\.groups"|structurizr\.groups/i, longer_alt: Identifier });
 export const StructurizrSoftwareSystemBoundaries = createToken({name: "structurizrSoftwareSystemBoundaries", pattern: /"structurizr\.softwareSystemBoundaries"|structurizr\.softwareSystemBoundaries/i, longer_alt: Identifier });
+export const Metadata = createToken({name: "metadata", pattern: /metadata/i, longer_alt: Identifier});
 
 /// Relationships
 export const Equals = createToken({ name: "equals", pattern: /=/ });
@@ -200,6 +203,9 @@ export const allTokens = [
     ShapeEnum,
     FontSize,
     Opacity,
+    StrokeWidth,
+    Stroke,
+    Metadata,
 
     Equals,
     RelatedTo,

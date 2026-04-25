@@ -173,7 +173,7 @@ class rawInterpreter extends BaseStructurizrVisitor {
 
     personSection(node: any) {
         this._debug && console.log('Here we are at personSection node:');
-        console.log(JSON.stringify(node, null, 2));        
+        // console.log(JSON.stringify(node, null, 2));        
         const id = node.identifier[0].image;
         const name = stripQuotes(node.stringLiteral[0]?.image ?? "");
         const description = stripQuotes(node.stringLiteral[1]?.image ?? "");
@@ -188,8 +188,8 @@ class rawInterpreter extends BaseStructurizrVisitor {
     }
 
     personChildSection(node: any, person: components["schemas"]["Person"]) {
-        this._debug && console.log(`Here we are at personChildSection with node: ${node.name}`);
-        console.log(JSON.stringify(node, null, 2));
+        this._debug && console.log(`Here we are at personChildSection node:`);
+        // console.log(JSON.stringify(node, null, 2));
         if (node.descriptionAttribute) { this.visit(node.descriptionAttribute, person); }
         if (node.tagsAttribute) { this.visit(node.tagsAttribute, person); }
         if (node.implicitRelationship) { for (const rel of node.implicitRelationship) { this.visit(rel, person); }}
@@ -515,6 +515,10 @@ class rawInterpreter extends BaseStructurizrVisitor {
         if (node.colourStyle){ this.visit(node.colourStyle, es); }
         if (node.fontStyle){ this.visit(node.fontStyle, es); }
         if (node.opacityStyle){ this.visit(node.opacityStyle, es); }
+        if (node.strokeWidthStyle){ this.visit(node.strokeWidthStyle, es); }
+        if (node.strokeStyle){ this.visit(node.strokeStyle, es); }
+        if (node.descriptionStyle){ this.visit(node.descriptionStyle, es); }
+        if (node.metadataStyle){ this.visit(node.metadataStyle, es); }
         this.workspace.views?.configuration?.styles?.elements?.push(es);
     }
 
@@ -542,6 +546,16 @@ class rawInterpreter extends BaseStructurizrVisitor {
         es.color = stripQuotes(node.hexColor[0].image ?? "");
     }
 
+    strokeStyle(node: any, es: components["schemas"]["ElementStyle"]) {
+        this._debug && console.log(`Here we are at strokeStyle with node: ${node.name}`);
+        es.stroke = stripQuotes(node.hexColor[0].image ?? "");
+    } 
+    
+    strokeWidthStyle(node: any, es: components["schemas"]["ElementStyle"]) {
+        this._debug && console.log(`Here we are at strokeWidthStyle with node: ${node.name}`);
+        es.strokeWidth = node.int[0].image;
+    }     
+
     fontStyle(node: any, es: components["schemas"]["ElementStyle"]) {
         this._debug && console.log(`Here we are at fontStyle with node: ${node.name}`);
         es.fontSize = node.int[0].image;
@@ -551,6 +565,16 @@ class rawInterpreter extends BaseStructurizrVisitor {
         this._debug && console.log(`Here we are at opacityStyle with node: ${node.name}`);
         es.opacity = node.int[0].image;
     }
+
+    descriptionStyle(node: any, es: components["schemas"]["ElementStyle"]) {
+        this._debug && console.log(`Here we are at descriptionStyle with node: ${node.name}`);
+        // es.description = stripQuotes(node.bool[0].image ?? "");
+    }
+
+    metadataStyle(node: any, es: components["schemas"]["ElementStyle"]) {
+        this._debug && console.log(`Here we are at metadataStyle with node: ${node.name}`);
+        // es.metadata = stripQuotes(node.bool[0].image ?? "");
+    }    
 
     findSourceEntity(s_id: string) {
         // Search Person

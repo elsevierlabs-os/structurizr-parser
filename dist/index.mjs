@@ -62,6 +62,8 @@ var Colour = createToken({ name: "colour", pattern: /colour/i, longer_alt: Ident
 var ShapeEnum = createToken({ name: "shapeEnum", pattern: /Box|RoundedBox|Circle|Ellipse|Hexagon|Cylinder|Pipe|Person|Robot|Folder|WebBrowser|MobileDevicePortrait|MobileDeviceLandscape|Component/i, longer_alt: Identifier });
 var FontSize = createToken({ name: "fontSize", pattern: /fontsize/i, longer_alt: Identifier });
 var Opacity = createToken({ name: "opacity", pattern: /opacity/i, longer_alt: Identifier });
+var Stroke = createToken({ name: "stroke", pattern: /stroke/i, longer_alt: Identifier });
+var StrokeWidth = createToken({ name: "strokeWidth", pattern: /strokeWidth/i, longer_alt: Identifier });
 var LocalWorkspaceId = createToken({ name: "localWorkspaceId", pattern: /"localWorkspaceId"|localWorkspaceId/i, longer_alt: Identifier });
 var StructurizrLocale = createToken({ name: "structurizrLocale", pattern: /"structurizr\.locale"|structurizr\.locale/i, longer_alt: Identifier });
 var StructurizrTimezone = createToken({ name: "structurizrTimezone", pattern: /"structurizr\.timezone"|structurizr\.timezone/i, longer_alt: Identifier });
@@ -74,6 +76,7 @@ var StructurizrEnterpriseBoundary = createToken({ name: "structurizrEnterpriseBo
 var StructurizrGroupSeparator = createToken({ name: "structurizrGroupSeparator", pattern: /"structurizr\.groupSeparator"|structurizr\.groupSeparator/i, longer_alt: Identifier });
 var StructurizrGroups = createToken({ name: "structurizrGroups", pattern: /"structurizr\.groups"|structurizr\.groups/i, longer_alt: Identifier });
 var StructurizrSoftwareSystemBoundaries = createToken({ name: "structurizrSoftwareSystemBoundaries", pattern: /"structurizr\.softwareSystemBoundaries"|structurizr\.softwareSystemBoundaries/i, longer_alt: Identifier });
+var Metadata = createToken({ name: "metadata", pattern: /metadata/i, longer_alt: Identifier });
 var Equals = createToken({ name: "equals", pattern: /=/ });
 var RelatedTo = createToken({ name: "relatedTo", pattern: /->/ });
 var Value = createToken({ name: "value", pattern: Lexer.NA });
@@ -162,6 +165,9 @@ var allTokens = [
   ShapeEnum,
   FontSize,
   Opacity,
+  StrokeWidth,
+  Stroke,
+  Metadata,
   Equals,
   RelatedTo,
   Bool,
@@ -924,6 +930,18 @@ var structurizrParser = class extends CstParser {
         } },
         { ALT: () => {
           this.SUBRULE(this.opacityStyle);
+        } },
+        { ALT: () => {
+          this.SUBRULE(this.strokeStyle);
+        } },
+        { ALT: () => {
+          this.SUBRULE(this.strokeWidthStyle);
+        } },
+        { ALT: () => {
+          this.SUBRULE(this.descriptionStyle);
+        } },
+        { ALT: () => {
+          this.SUBRULE(this.metadataStyle);
         } }
       ]);
     });
@@ -972,6 +990,14 @@ var structurizrParser = class extends CstParser {
     this.CONSUME(Colour);
     this.CONSUME(HexColor);
   });
+  strokeStyle = this.RULE("strokeStyle", () => {
+    this.CONSUME(Stroke);
+    this.CONSUME(HexColor);
+  });
+  strokeWidthStyle = this.RULE("strokeWidthStyle", () => {
+    this.CONSUME(StrokeWidth);
+    this.CONSUME(Int);
+  });
   fontStyle = this.RULE("fontStyle", () => {
     this.CONSUME(FontSize);
     this.CONSUME(Int);
@@ -979,6 +1005,14 @@ var structurizrParser = class extends CstParser {
   opacityStyle = this.RULE("opacityStyle", () => {
     this.CONSUME(Opacity);
     this.CONSUME(Int);
+  });
+  descriptionStyle = this.RULE("descriptionStyle", () => {
+    this.CONSUME(Description);
+    this.CONSUME(Bool);
+  });
+  metadataStyle = this.RULE("metadataStyle", () => {
+    this.CONSUME(Metadata);
+    this.CONSUME(Bool);
   });
 };
 var StructurizrParser = new structurizrParser();
@@ -1227,7 +1261,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
   }
   personSection(node) {
     this._debug && console.log("Here we are at personSection node:");
-    console.log(JSON.stringify(node, null, 2));
     const id = node.identifier[0].image;
     const name = stripQuotes(node.stringLiteral[0]?.image ?? "");
     const description = stripQuotes(node.stringLiteral[1]?.image ?? "");
@@ -1243,8 +1276,7 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     }
   }
   personChildSection(node, person) {
-    this._debug && console.log(`Here we are at personChildSection with node: ${node.name}`);
-    console.log(JSON.stringify(node, null, 2));
+    this._debug && console.log(`Here we are at personChildSection node:`);
     if (node.descriptionAttribute) {
       this.visit(node.descriptionAttribute, person);
     }
@@ -1678,6 +1710,18 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     if (node.opacityStyle) {
       this.visit(node.opacityStyle, es);
     }
+    if (node.strokeWidthStyle) {
+      this.visit(node.strokeWidthStyle, es);
+    }
+    if (node.strokeStyle) {
+      this.visit(node.strokeStyle, es);
+    }
+    if (node.descriptionStyle) {
+      this.visit(node.descriptionStyle, es);
+    }
+    if (node.metadataStyle) {
+      this.visit(node.metadataStyle, es);
+    }
     this.workspace.views?.configuration?.styles?.elements?.push(es);
   }
   relationshipStyleSection(node) {
@@ -1698,6 +1742,14 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     this._debug && console.log(`Here we are at colourStyle with node: ${node.name}`);
     es.color = stripQuotes(node.hexColor[0].image ?? "");
   }
+  strokeStyle(node, es) {
+    this._debug && console.log(`Here we are at strokeStyle with node: ${node.name}`);
+    es.stroke = stripQuotes(node.hexColor[0].image ?? "");
+  }
+  strokeWidthStyle(node, es) {
+    this._debug && console.log(`Here we are at strokeWidthStyle with node: ${node.name}`);
+    es.strokeWidth = node.int[0].image;
+  }
   fontStyle(node, es) {
     this._debug && console.log(`Here we are at fontStyle with node: ${node.name}`);
     es.fontSize = node.int[0].image;
@@ -1705,6 +1757,12 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
   opacityStyle(node, es) {
     this._debug && console.log(`Here we are at opacityStyle with node: ${node.name}`);
     es.opacity = node.int[0].image;
+  }
+  descriptionStyle(node, es) {
+    this._debug && console.log(`Here we are at descriptionStyle with node: ${node.name}`);
+  }
+  metadataStyle(node, es) {
+    this._debug && console.log(`Here we are at metadataStyle with node: ${node.name}`);
   }
   findSourceEntity(s_id) {
     let p = this.workspace.model?.people?.find((pr) => pr.id === s_id);
@@ -1783,6 +1841,7 @@ var RawInterpreter = new rawInterpreter();
 
 // src/VSCodeVisitor.ts
 var vsCodeVisitor = class extends BaseStructurizrVisitorWithDefaults {
+  _debug = false;
   c4result = [];
   properties = [];
   constructor() {
@@ -1790,6 +1849,9 @@ var vsCodeVisitor = class extends BaseStructurizrVisitorWithDefaults {
     this.c4result = [];
     this.properties = [];
     this.validateVisitor();
+  }
+  set Debug(flag) {
+    this._debug = flag;
   }
   workspaceWrapper(node) {
     this.c4result = [];
@@ -1799,17 +1861,17 @@ var vsCodeVisitor = class extends BaseStructurizrVisitorWithDefaults {
     }
   }
   propertiesSection(ctx) {
-    console.log(`Visiting propertiesSection`);
+    this._debug && console.log(`Visiting propertiesSection`);
     if (ctx.localWorkspaceIdProperty) {
       this.visit(ctx.localWorkspaceIdProperty);
     }
   }
   localWorkspaceIdProperty(ctx) {
-    console.log(`Visiting localWorkspaceIdProperty: ${ctx.stringLiteral[0].image}`);
+    this._debug && console.log(`Visiting localWorkspaceIdProperty: ${ctx.stringLiteral[0].image}`);
     this.properties.push({ localWorkspaceId: ctx.stringLiteral[0] });
   }
   softwareSystemSection(ctx) {
-    console.log(`Visiting softwareSystemSection: ${ctx.softwareSystem[0].image}`);
+    this._debug && console.log(`Visiting softwareSystemSection: ${ctx.softwareSystem[0].image}`);
     this.c4result.push({ softwareSystem: ctx.stringLiteral[0] });
     if (ctx.softwareSystemChildSection) {
       this.visit(ctx.softwareSystemChildSection);
@@ -1823,7 +1885,7 @@ var vsCodeVisitor = class extends BaseStructurizrVisitorWithDefaults {
     }
   }
   containerSection(ctx) {
-    console.log(`Visiting containerSection: ${ctx.container[0].image}`);
+    this._debug && console.log(`Visiting containerSection: ${ctx.container[0].image}`);
     this.c4result.push({ container: ctx.stringLiteral[0] });
     if (ctx.containerChildSection) {
       this.visit(ctx.containerChildSection);
@@ -1837,7 +1899,7 @@ var vsCodeVisitor = class extends BaseStructurizrVisitorWithDefaults {
     }
   }
   componentSection(ctx) {
-    console.log(`Visiting componentSection: ${ctx.component[0].image}`);
+    this._debug && console.log(`Visiting componentSection: ${ctx.component[0].image}`);
     this.c4result.push({ component: ctx.stringLiteral[0] });
   }
 };
@@ -1889,6 +1951,7 @@ export {
   LBrace,
   LineComment,
   LocalWorkspaceId,
+  Metadata,
   Model,
   Name,
   Opacity,
@@ -1903,6 +1966,8 @@ export {
   SoftwareSystem,
   SoftwareSystemInstance,
   StringLiteral,
+  Stroke,
+  StrokeWidth,
   StructurizrDescription,
   StructurizrEnterpriseBoundary,
   StructurizrGroupSeparator,

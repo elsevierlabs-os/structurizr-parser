@@ -3215,6 +3215,46 @@
                     "idx": 0
                   }
                 ]
+              },
+              {
+                "type": "Alternative",
+                "definition": [
+                  {
+                    "type": "NonTerminal",
+                    "name": "strokeStyle",
+                    "idx": 0
+                  }
+                ]
+              },
+              {
+                "type": "Alternative",
+                "definition": [
+                  {
+                    "type": "NonTerminal",
+                    "name": "strokeWidthStyle",
+                    "idx": 0
+                  }
+                ]
+              },
+              {
+                "type": "Alternative",
+                "definition": [
+                  {
+                    "type": "NonTerminal",
+                    "name": "descriptionStyle",
+                    "idx": 0
+                  }
+                ]
+              },
+              {
+                "type": "Alternative",
+                "definition": [
+                  {
+                    "type": "NonTerminal",
+                    "name": "metadataStyle",
+                    "idx": 0
+                  }
+                ]
               }
             ]
           }
@@ -3415,6 +3455,48 @@
   },
   {
     "type": "Rule",
+    "name": "strokeStyle",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "stroke",
+        "label": "stroke",
+        "idx": 0,
+        "pattern": "stroke"
+      },
+      {
+        "type": "Terminal",
+        "name": "hexColor",
+        "label": "hexColor",
+        "idx": 0,
+        "pattern": "#[0-9A-Fa-f]{6}"
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "strokeWidthStyle",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "strokeWidth",
+        "label": "strokeWidth",
+        "idx": 0,
+        "pattern": "strokeWidth"
+      },
+      {
+        "type": "Terminal",
+        "name": "int",
+        "label": "int",
+        "idx": 0,
+        "pattern": "-?(?:0|[1-9][0-9]*)"
+      }
+    ]
+  },
+  {
+    "type": "Rule",
     "name": "fontStyle",
     "orgText": "",
     "definition": [
@@ -3452,6 +3534,48 @@
         "label": "int",
         "idx": 0,
         "pattern": "-?(?:0|[1-9][0-9]*)"
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "descriptionStyle",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "description",
+        "label": "description",
+        "idx": 0,
+        "pattern": "description"
+      },
+      {
+        "type": "Terminal",
+        "name": "bool",
+        "label": "bool",
+        "idx": 0,
+        "pattern": "(true|false)"
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "metadataStyle",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "metadata",
+        "label": "metadata",
+        "idx": 0,
+        "pattern": "metadata"
+      },
+      {
+        "type": "Terminal",
+        "name": "bool",
+        "label": "bool",
+        "idx": 0,
+        "pattern": "(true|false)"
       }
     ]
   }

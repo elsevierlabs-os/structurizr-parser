@@ -63,6 +63,8 @@ declare const Colour: chevrotain.TokenType;
 declare const ShapeEnum: chevrotain.TokenType;
 declare const FontSize: chevrotain.TokenType;
 declare const Opacity: chevrotain.TokenType;
+declare const Stroke: chevrotain.TokenType;
+declare const StrokeWidth: chevrotain.TokenType;
 declare const LocalWorkspaceId: chevrotain.TokenType;
 declare const StructurizrLocale: chevrotain.TokenType;
 declare const StructurizrTimezone: chevrotain.TokenType;
@@ -75,6 +77,7 @@ declare const StructurizrEnterpriseBoundary: chevrotain.TokenType;
 declare const StructurizrGroupSeparator: chevrotain.TokenType;
 declare const StructurizrGroups: chevrotain.TokenType;
 declare const StructurizrSoftwareSystemBoundaries: chevrotain.TokenType;
+declare const Metadata: chevrotain.TokenType;
 declare const Equals: chevrotain.TokenType;
 declare const RelatedTo: chevrotain.TokenType;
 declare const Value: chevrotain.TokenType;
@@ -155,8 +158,12 @@ declare class structurizrParser extends CstParser {
     private backgroundStyle;
     private colorStyle;
     private colourStyle;
+    private strokeStyle;
+    private strokeWidthStyle;
     private fontStyle;
     private opacityStyle;
+    private descriptionStyle;
+    private metadataStyle;
 }
 declare const StructurizrParser: structurizrParser;
 declare const BaseStructurizrVisitor: new (...args: any[]) => chevrotain.ICstVisitor<any, any>;
@@ -1184,8 +1191,12 @@ declare class rawInterpreter extends BaseStructurizrVisitor {
     backgroundStyle(node: any, es: components["schemas"]["ElementStyle"]): void;
     colorStyle(node: any, es: components["schemas"]["ElementStyle"]): void;
     colourStyle(node: any, es: components["schemas"]["ElementStyle"]): void;
+    strokeStyle(node: any, es: components["schemas"]["ElementStyle"]): void;
+    strokeWidthStyle(node: any, es: components["schemas"]["ElementStyle"]): void;
     fontStyle(node: any, es: components["schemas"]["ElementStyle"]): void;
     opacityStyle(node: any, es: components["schemas"]["ElementStyle"]): void;
+    descriptionStyle(node: any, es: components["schemas"]["ElementStyle"]): void;
+    metadataStyle(node: any, es: components["schemas"]["ElementStyle"]): void;
     findSourceEntity(s_id: string): {
         id?: string;
         name?: string;
@@ -1219,9 +1230,11 @@ declare class rawInterpreter extends BaseStructurizrVisitor {
 declare const RawInterpreter: rawInterpreter;
 
 declare class vsCodeVisitor extends BaseStructurizrVisitorWithDefaults {
+    private _debug;
     c4result: any[];
     properties: any[];
     constructor();
+    set Debug(flag: boolean);
     workspaceWrapper(node: any): void;
     propertiesSection(ctx: any): void;
     localWorkspaceIdProperty(ctx: any): void;
@@ -1233,4 +1246,4 @@ declare class vsCodeVisitor extends BaseStructurizrVisitorWithDefaults {
 }
 declare const VSCodeVisitor: vsCodeVisitor;
 
-export { Animation, AutoLayout, Background, BangAdrs, BangConstant, BangDocs, BangImpliedRelationships, BangInclude, BangIndentifiers, BaseStructurizrVisitor, BaseStructurizrVisitorWithDefaults, BlockComment, Bool, Branding, Color, Colour, Component, Configuration, Container, ContainerInstance, Custom, Deployment, DeploymentEnvironment, DeploymentGroup, DeploymentNode, Description, Dynamic, Element, Enterprise, Equals, Extends, FilePath, Filtered, Float, FontSize, Group, HashComment, HexColor, Identifier, Image, Include, InfrastructureNode, Int, LBrace, LineComment, LocalWorkspaceId, Model, Name, Opacity, Person, Properties, RBrace, RawInterpreter, RelatedTo, Relationship, Shape, ShapeEnum, SoftwareSystem, SoftwareSystemInstance, StringLiteral, StructurizrDescription, StructurizrEnterpriseBoundary, StructurizrGroupSeparator, StructurizrGroups, StructurizrLexer, StructurizrLocale, StructurizrMetadata, StructurizrParser, StructurizrSoftwareSystemBoundaries, StructurizrSort, StructurizrTimezone, StructurizrTitle, StructurizrTooltips, Styles, SystemContext, SystemLandscape, Tag, Tags, Technology, Terminology, Theme, Themes, Title, Url, Users, VSCodeVisitor, Value, Views, WhiteSpace, Wildcard, Word, Workspace, allTokens };
+export { Animation, AutoLayout, Background, BangAdrs, BangConstant, BangDocs, BangImpliedRelationships, BangInclude, BangIndentifiers, BaseStructurizrVisitor, BaseStructurizrVisitorWithDefaults, BlockComment, Bool, Branding, Color, Colour, Component, Configuration, Container, ContainerInstance, Custom, Deployment, DeploymentEnvironment, DeploymentGroup, DeploymentNode, Description, Dynamic, Element, Enterprise, Equals, Extends, FilePath, Filtered, Float, FontSize, Group, HashComment, HexColor, Identifier, Image, Include, InfrastructureNode, Int, LBrace, LineComment, LocalWorkspaceId, Metadata, Model, Name, Opacity, Person, Properties, RBrace, RawInterpreter, RelatedTo, Relationship, Shape, ShapeEnum, SoftwareSystem, SoftwareSystemInstance, StringLiteral, Stroke, StrokeWidth, StructurizrDescription, StructurizrEnterpriseBoundary, StructurizrGroupSeparator, StructurizrGroups, StructurizrLexer, StructurizrLocale, StructurizrMetadata, StructurizrParser, StructurizrSoftwareSystemBoundaries, StructurizrSort, StructurizrTimezone, StructurizrTitle, StructurizrTooltips, Styles, SystemContext, SystemLandscape, Tag, Tags, Technology, Terminology, Theme, Themes, Title, Url, Users, VSCodeVisitor, Value, Views, WhiteSpace, Wildcard, Word, Workspace, allTokens };
