@@ -1,6 +1,8 @@
 import * as fsPromise from 'fs/promises';
 import { StructurizrLexer } from '../src/Lexer';
 import { LexerVisualizer } from '../src/LexerVisualizer';
+import { formatLexingErrors } from '../src/formatLexingErrors';
+import { describe, test, expect } from '@jest/globals';
 
 describe('Testing StructurizrLexer', () => {
     test('Can scan getting started file', async() => {
@@ -46,7 +48,7 @@ describe('Testing StructurizrLexer', () => {
         }
         expect(lexingResult).toBeDefined();
         if (lexingResult.errors.length > 0) {
-            console.log(lexingResult.errors);
+            console.log(formatLexingErrors(lexingResult.errors));
         }
         expect(lexingResult.errors.length).toBe(0);
     });

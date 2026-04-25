@@ -3,6 +3,7 @@ import { StructurizrLexer } from '../src/Lexer';
 import { StructurizrParser } from '../src/Parser';
 import { RawInterpreter } from '../src/RawInterpreter';
 import { components } from '../src/structurizr.schema';
+import { describe, test, expect } from '@jest/globals';
 
 describe('Testing RawInterpreter', () => {
     test('Can RAW interpret getting started dsl', async() => {

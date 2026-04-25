@@ -2,6 +2,7 @@ import * as fsPromise from 'fs/promises';
 import { StructurizrParser } from '../src/Parser';
 import { createSyntaxDiagramsCode } from 'chevrotain';
 import { StructurizrLexer } from '../src/Lexer';
+import { describe, test, expect } from '@jest/globals';
 
 describe('Testing StructurizrParser', () => {
     test('Can generate syntax diagrams', async () => {

@@ -2,6 +2,7 @@ import * as fsPromise from 'fs/promises';
 import { StructurizrLexer } from '../src/Lexer';
 import { StructurizrParser } from '../src/Parser';
 import { VSCodeVisitor } from '../src/VSCodeVisitor';
+import { describe, test, expect } from '@jest/globals';
 
 describe('Testing VSCodeVisitor', () => {
     test('Can VSCode interpret getting started dsl', async () => {
