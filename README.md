@@ -4,7 +4,7 @@
 
 Parses Structurizr DSL files to support workspace population, code validation and other uses
 
-> This is BETA software and should be used with caution as it is not feature complete or fully tested
+> This is BETA software and should be used with caution as it is not feature complete or fully tested. Note that a second version of this parser is being built as the original Lexer was over constrained and causing issues. Some of the logic will be moved to the StructurizrParser or StructurtizrInterpreter. These alternatives can be found via adding a 2 at the end of the name. For example, StructurizrLexer2.
 
 The library is broken up into three parts. Each should be executed in turn depending on the outcome you are expecting.
 

@@ -32,5 +32,19 @@ describe('Testing StructurizrLexer2', () => {
             console.error(formatLexingErrors(lexingResult.errors));
         }        
         expect(lexingResult.errors.length).toBe(0);
-    });    
+    });
+    test('Can scan big bank file', async() => {
+        var dsl = await fsPromise.readFile('./tests/data/big-bank-plc.dsl', 'utf-8');
+        let lexingResult = StructurizrLexer2.tokenize(dsl);
+        if (lexingResult){
+            let viz = new LexerVisualizer("big-bank-plc.dsl");
+            let htmlText = viz.createVisual(lexingResult);
+            await fsPromise.writeFile("./tests/diagrams2/big-bank-plc.html", htmlText);
+        }
+        expect(lexingResult).toBeDefined();
+        if (lexingResult.errors.length > 0) {
+            console.error(formatLexingErrors(lexingResult.errors));
+        }
+        expect(lexingResult.errors.length).toBe(0);
+    });      
 });
