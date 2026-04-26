@@ -20,6 +20,7 @@ export const HashComment = addNewToken({name: "hashComment", pattern: /\#\s(.*?)
 export const WhiteSpace = addNewToken({ name: 'whiteSpace', pattern: /[\s\t\n\r]+/, group: Lexer.SKIPPED });
 
 /// Literals - was /"(?:[^\\"]|\\(?:[bfnrtv"\\/]|u[0-9a-fA-F]{4}))*"/ but I think this also included escaped char and unicode, maybe not required
+export const StringBoolean = addNewToken({name: "stringBoolean", pattern: /"(?:true|false)"/i });
 export const StringLiteral = addNewToken({name: "stringLiteral", pattern: /"(?:[^"\\]|\\.)*"/ });
 
 /// URL
@@ -47,6 +48,8 @@ export const BangRelationships = addNewToken({name: "bangRelationships", pattern
 export const BangRelationship = addNewToken({name: "bangRelationship", pattern: /!relationship/i });
 export const BangScript = addNewToken({name: "bangScript", pattern: /!script/i });
 export const Workspace = addNewToken({ name: "workspace", pattern: /workspace/i, longer_alt: Identifier });
+export const Extends = addNewToken({ name: "extends", pattern: /extends/i, longer_alt: Identifier });
+export const Name = addNewToken({ name: "name", pattern: /name/i, longer_alt: Identifier });
 export const Model = addNewToken({ name: "model", pattern: /model/i, longer_alt: Identifier });
 export const Archetypes = addNewToken({ name: "archetypes", pattern: /archetypes/i, longer_alt: Identifier });
 export const Enterprise = addNewToken({ name: "enterprise", pattern: /enterprise/i, longer_alt: Identifier });
@@ -99,6 +102,7 @@ export const Users = addNewToken({name: "users", pattern: /users/i, longer_alt: 
 
 /// Values
 export const HexColor = addNewToken({ name: "hexColor", pattern: /#[0-9A-Fa-f]{6}/, longer_alt: HashComment });
+export const Boolean = addNewToken({ name: "boolean", pattern: /true|false/i, longer_alt: Identifier });
 
 /// Furniture
 export const LBrace = addNewToken({ name: "lBrace", pattern: /\{/, label: "{" });
