@@ -12,6 +12,9 @@ describe('Testing RawInterpreter', () => {
         expect(lexingResult.errors.length).toBe(0);
         StructurizrParser.input = lexingResult.tokens;
         const cst = StructurizrParser.workspaceWrapper();
+        if (StructurizrParser.errors.length > 0) {
+            console.log(StructurizrParser.errors);
+        }
         expect(StructurizrParser.errors.length).toBe(0);
         expect(cst.name).toBe("workspaceWrapper");
         const c4wspace = RawInterpreter.visit(cst) as components["schemas"]["Workspace"];
@@ -28,6 +31,9 @@ describe('Testing RawInterpreter', () => {
         expect(lexingResult.errors.length).toBe(0);
         StructurizrParser.input = lexingResult.tokens;
         const cst = StructurizrParser.workspaceWrapper();
+        if (StructurizrParser.errors.length > 0) {
+            console.log(StructurizrParser.errors);
+        }
         expect(StructurizrParser.errors.length).toBe(0);
         expect(cst.name).toBe("workspaceWrapper");
         const c4wspace = RawInterpreter.visit(cst) as components["schemas"]["Workspace"];

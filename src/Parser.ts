@@ -651,7 +651,8 @@ class structurizrParser extends CstParser {
     this.CONSUME(Shape);
     this.OR([
       {ALT: () => {this.CONSUME(ShapeEnum)}},
-      {ALT: () => {this.CONSUME(Person)}}
+      {ALT: () => {this.CONSUME(Person)}},
+      {ALT: () => {this.CONSUME(StringLiteral)}}
     ]);
     ;
   });

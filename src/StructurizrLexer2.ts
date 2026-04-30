@@ -21,6 +21,7 @@ export const WhiteSpace = addNewToken({ name: 'whiteSpace', pattern: /[\s\t\n\r]
 
 /// Literals - was /"(?:[^\\"]|\\(?:[bfnrtv"\\/]|u[0-9a-fA-F]{4}))*"/ but I think this also included escaped char and unicode, maybe not required
 export const StringBoolean = addNewToken({name: "stringBoolean", pattern: /"(?:true|false)"/i });
+export const QuotedWord = addNewToken({name: "quotedWord", pattern: /"[^\s"\\]+"/ });
 export const StringLiteral = addNewToken({name: "stringLiteral", pattern: /"(?:[^"\\]|\\.)*"/ });
 
 /// URL
@@ -32,6 +33,7 @@ export const FilePath = addNewToken({name: "filePath", pattern: /\.\.?\/[^\n"?:*
 /// Identifiers was /[a-zA-Z_0-9]\w*/ and /[a-zA-z][a-zA-z.]*\_?[0-9]*/
 export const DottedProperty = createToken({ name: 'dottedProperty', pattern: /[a-zA-Z][a-zA-Z.]*_?[0-9]*/ });
 export const Identifier = createToken({ name: 'identifier', pattern: /[a-zA-Z_0-9-]*[a-zA-Z_0-9][a-zA-Z_0-9-]*/, longer_alt: DottedProperty });
+export const Property = createToken({ name: 'property', pattern: /\w+/ });
 
 /// Keywords
 export const BangInclude = addNewToken({name: "bangInclude", pattern: /!include/i });
@@ -118,5 +120,6 @@ export const Wildcard = addNewToken({name: "wildcard", pattern: /(\*)/ });
 /// Add Identifier as a longer alternative to all keywords so that they are not accidentally matched as keywords when they are used as identifiers
 allTokens.push(Identifier);
 allTokens.push(DottedProperty);
+allTokens.push(Property);
 
 export const StructurizrLexer2 = new Lexer(allTokens);

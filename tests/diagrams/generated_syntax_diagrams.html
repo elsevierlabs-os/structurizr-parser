@@ -3370,7 +3370,7 @@
                 "name": "shapeEnum",
                 "label": "shapeEnum",
                 "idx": 0,
-                "pattern": "Box|RoundedBox|Circle|Ellipse|Hexagon|Cylinder|Pipe|Person|Robot|Folder|WebBrowser|MobileDevicePortrait|MobileDeviceLandscape|Component"
+                "pattern": "Box|RoundedBox|Circle|Ellipse|Hexagon|Diamond|Cylinder|Bucket|Pipe|Person|Robot|Folder|WebBrowser|Window|Terminal|Shell|MobileDevicePortrait|MobileDeviceLandscape|Component"
               }
             ]
           },
@@ -3383,6 +3383,18 @@
                 "label": "person",
                 "idx": 0,
                 "pattern": "person"
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "Terminal",
+                "name": "stringLiteral",
+                "label": "stringLiteral",
+                "idx": 0,
+                "pattern": "\"(?:[^\"\\\\]|\\\\.)*\""
               }
             ]
           }

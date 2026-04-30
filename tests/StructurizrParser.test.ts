@@ -20,7 +20,7 @@ describe('Testing StructurizrParser', () => {
         StructurizrParser.input = lexingResult.tokens;
         const cst = StructurizrParser.workspaceWrapper();
         if (StructurizrParser.errors.length > 0) {
-            console.log(StructurizrParser.errors);
+            logParserErrors();
         };
         expect(StructurizrParser.errors.length).toBe(0);
         expect(cst.name).toBe("workspaceWrapper");
@@ -33,7 +33,7 @@ describe('Testing StructurizrParser', () => {
         StructurizrParser.input = lexingResult.tokens;
         const cst = StructurizrParser.workspaceWrapper();
         if (StructurizrParser.errors.length > 0) {
-            console.log(StructurizrParser.errors);
+            logParserErrors();
         };
         expect(StructurizrParser.errors.length).toBe(0);
         expect(cst.name).toBe("workspaceWrapper");
@@ -46,7 +46,7 @@ describe('Testing StructurizrParser', () => {
         StructurizrParser.input = lexingResult.tokens;
         const cst = StructurizrParser.workspaceWrapper();
         if (StructurizrParser.errors.length > 0) {
-            console.log(StructurizrParser.errors);
+            logParserErrors();
         };
         expect(StructurizrParser.errors.length).toBe(0);
         expect(cst.name).toBe("workspaceWrapper");
@@ -59,7 +59,7 @@ describe('Testing StructurizrParser', () => {
         StructurizrParser.input = lexingResult.tokens;
         const cst = StructurizrParser.workspaceWrapper();
         if (StructurizrParser.errors.length > 0) {
-            console.log(StructurizrParser.errors);
+            logParserErrors();
         };
         expect(StructurizrParser.errors.length).toBe(0);
         expect(cst.name).toBe("workspaceWrapper");
@@ -72,15 +72,7 @@ describe('Testing StructurizrParser', () => {
         StructurizrParser.input = lexingResult.tokens;
         const cst = StructurizrParser.workspaceWrapper();
         if (StructurizrParser.errors.length > 0) {
-            console.error(`Parser errors: ${StructurizrParser.errors.length}`);
-            StructurizrParser.errors.forEach((err, i) => {
-                console.error(
-                    `[${i + 1}] ${err.message} ` +
-                    `(token: ${err.token?.image ?? "N/A"}, ` +
-                    `line: ${err.token?.startLine ?? "?"}, ` +
-                    `col: ${err.token?.startColumn ?? "?"})`
-                );
-            });
+            logParserErrors();
         }
         expect(StructurizrParser.errors.length).toBe(0);
         expect(cst.name).toBe("workspaceWrapper");
@@ -93,9 +85,21 @@ describe('Testing StructurizrParser', () => {
         StructurizrParser.input = lexingResult.tokens;
         const cst = StructurizrParser.workspaceWrapper();
         if (StructurizrParser.errors.length > 0) {
-            console.log(StructurizrParser.errors);
-        };
+            logParserErrors();
+        }
         expect(StructurizrParser.errors.length).toBe(0);
         expect(cst.name).toBe("workspaceWrapper");
     });
 });
+
+function logParserErrors() {
+    console.error(`Parser errors: ${StructurizrParser.errors.length}`);
+    StructurizrParser.errors.forEach((err, i) => {
+        console.error(
+            `[${i + 1}] ${err.message} ` +
+            `(token: ${err.token?.image ?? "N/A"}, ` +
+            `line: ${err.token?.startLine ?? "?"}, ` +
+            `col: ${err.token?.startColumn ?? "?"})`
+        );
+    });
+}
