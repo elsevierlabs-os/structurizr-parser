@@ -298,7 +298,8 @@ class structurizrParser extends CstParser {
       this.OR([
         {ALT: () => {this.SUBRULE(this.componentGroupSection)}},
         {ALT: () => {this.SUBRULE(this.componentSection)}},
-        {ALT: () => {this.SUBRULE(this.implicitRelationship)}}
+        {ALT: () => {this.SUBRULE(this.implicitRelationship)}},
+        {ALT: () => {this.SUBRULE(this.tagsAttribute)}}
       ]);
     });
     this.CONSUME1(RBrace);
