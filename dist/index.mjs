@@ -59,7 +59,7 @@ var Shape = createToken({ name: "shape", pattern: /shape/i, longer_alt: Identifi
 var Background = createToken({ name: "background", pattern: /background/i, longer_alt: Identifier });
 var Color = createToken({ name: "color", pattern: /color/i, longer_alt: Identifier });
 var Colour = createToken({ name: "colour", pattern: /colour/i, longer_alt: Identifier });
-var ShapeEnum = createToken({ name: "shapeEnum", pattern: /Box|RoundedBox|Circle|Ellipse|Hexagon|Cylinder|Pipe|Person|Robot|Folder|WebBrowser|MobileDevicePortrait|MobileDeviceLandscape|Component/i, longer_alt: Identifier });
+var ShapeEnum = createToken({ name: "shapeEnum", pattern: /Box|RoundedBox|Circle|Ellipse|Hexagon|Diamond|Cylinder|Bucket|Pipe|Person|Robot|Folder|WebBrowser|Window|Terminal|Shell|MobileDevicePortrait|MobileDeviceLandscape|Component/i, longer_alt: Identifier });
 var FontSize = createToken({ name: "fontSize", pattern: /fontsize/i, longer_alt: Identifier });
 var Opacity = createToken({ name: "opacity", pattern: /opacity/i, longer_alt: Identifier });
 var Stroke = createToken({ name: "stroke", pattern: /stroke/i, longer_alt: Identifier });
@@ -181,6 +181,30 @@ var allTokens = [
   RBrace
 ];
 var StructurizrLexer = new Lexer(allTokens);
+
+// src/formatLexingErrors.ts
+var formatLocation = (error) => {
+  const parts = [];
+  if (error.line !== void 0) {
+    parts.push(`line ${error.line}`);
+  }
+  if (error.column !== void 0) {
+    parts.push(`column ${error.column}`);
+  }
+  if (error.offset !== void 0) {
+    parts.push(`offset ${error.offset}`);
+  }
+  if (error.length !== void 0) {
+    parts.push(`length ${error.length}`);
+  }
+  return parts.length > 0 ? ` (${parts.join(", ")})` : "";
+};
+var formatLexingErrors = (errors) => {
+  if (errors.length === 0) {
+    return "No lexing errors.";
+  }
+  return errors.map((error, index) => `${index + 1}. ${error.message}${formatLocation(error)}`).join("\n");
+};
 
 // src/Parser.ts
 import { CstParser } from "chevrotain";
@@ -974,6 +998,9 @@ var structurizrParser = class extends CstParser {
       } },
       { ALT: () => {
         this.CONSUME(Person);
+      } },
+      { ALT: () => {
+        this.CONSUME(StringLiteral);
       } }
     ]);
     ;
@@ -2000,5 +2027,6 @@ export {
   Wildcard,
   Word,
   Workspace,
-  allTokens
+  allTokens,
+  formatLexingErrors
 };

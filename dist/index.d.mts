@@ -1,5 +1,5 @@
 import * as chevrotain from 'chevrotain';
-import { Lexer, CstParser } from 'chevrotain';
+import { Lexer, ILexingError, CstParser } from 'chevrotain';
 
 declare const BlockComment: chevrotain.TokenType;
 declare const LineComment: chevrotain.TokenType;
@@ -92,6 +92,8 @@ declare const RBrace: chevrotain.TokenType;
 declare const WhiteSpace: chevrotain.TokenType;
 declare const allTokens: chevrotain.TokenType[];
 declare const StructurizrLexer: Lexer;
+
+declare const formatLexingErrors: (errors: ILexingError[]) => string;
 
 declare class structurizrParser extends CstParser {
     constructor();
@@ -1246,4 +1248,4 @@ declare class vsCodeVisitor extends BaseStructurizrVisitorWithDefaults {
 }
 declare const VSCodeVisitor: vsCodeVisitor;
 
-export { Animation, AutoLayout, Background, BangAdrs, BangConstant, BangDocs, BangImpliedRelationships, BangInclude, BangIndentifiers, BaseStructurizrVisitor, BaseStructurizrVisitorWithDefaults, BlockComment, Bool, Branding, Color, Colour, Component, Configuration, Container, ContainerInstance, Custom, Deployment, DeploymentEnvironment, DeploymentGroup, DeploymentNode, Description, Dynamic, Element, Enterprise, Equals, Extends, FilePath, Filtered, Float, FontSize, Group, HashComment, HexColor, Identifier, Image, Include, InfrastructureNode, Int, LBrace, LineComment, LocalWorkspaceId, Metadata, Model, Name, Opacity, Person, Properties, RBrace, RawInterpreter, RelatedTo, Relationship, Shape, ShapeEnum, SoftwareSystem, SoftwareSystemInstance, StringLiteral, Stroke, StrokeWidth, StructurizrDescription, StructurizrEnterpriseBoundary, StructurizrGroupSeparator, StructurizrGroups, StructurizrLexer, StructurizrLocale, StructurizrMetadata, StructurizrParser, StructurizrSoftwareSystemBoundaries, StructurizrSort, StructurizrTimezone, StructurizrTitle, StructurizrTooltips, Styles, SystemContext, SystemLandscape, Tag, Tags, Technology, Terminology, Theme, Themes, Title, Url, Users, VSCodeVisitor, Value, Views, WhiteSpace, Wildcard, Word, Workspace, allTokens };
+export { Animation, AutoLayout, Background, BangAdrs, BangConstant, BangDocs, BangImpliedRelationships, BangInclude, BangIndentifiers, BaseStructurizrVisitor, BaseStructurizrVisitorWithDefaults, BlockComment, Bool, Branding, Color, Colour, Component, Configuration, Container, ContainerInstance, Custom, Deployment, DeploymentEnvironment, DeploymentGroup, DeploymentNode, Description, Dynamic, Element, Enterprise, Equals, Extends, FilePath, Filtered, Float, FontSize, Group, HashComment, HexColor, Identifier, Image, Include, InfrastructureNode, Int, LBrace, LineComment, LocalWorkspaceId, Metadata, Model, Name, Opacity, Person, Properties, RBrace, RawInterpreter, RelatedTo, Relationship, Shape, ShapeEnum, SoftwareSystem, SoftwareSystemInstance, StringLiteral, Stroke, StrokeWidth, StructurizrDescription, StructurizrEnterpriseBoundary, StructurizrGroupSeparator, StructurizrGroups, StructurizrLexer, StructurizrLocale, StructurizrMetadata, StructurizrParser, StructurizrSoftwareSystemBoundaries, StructurizrSort, StructurizrTimezone, StructurizrTitle, StructurizrTooltips, Styles, SystemContext, SystemLandscape, Tag, Tags, Technology, Terminology, Theme, Themes, Title, Url, Users, VSCodeVisitor, Value, Views, WhiteSpace, Wildcard, Word, Workspace, allTokens, formatLexingErrors };

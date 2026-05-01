@@ -115,7 +115,8 @@ __export(src_exports, {
   Wildcard: () => Wildcard,
   Word: () => Word,
   Workspace: () => Workspace,
-  allTokens: () => allTokens
+  allTokens: () => allTokens,
+  formatLexingErrors: () => formatLexingErrors
 });
 module.exports = __toCommonJS(src_exports);
 
@@ -180,7 +181,7 @@ var Shape = (0, import_chevrotain.createToken)({ name: "shape", pattern: /shape/
 var Background = (0, import_chevrotain.createToken)({ name: "background", pattern: /background/i, longer_alt: Identifier });
 var Color = (0, import_chevrotain.createToken)({ name: "color", pattern: /color/i, longer_alt: Identifier });
 var Colour = (0, import_chevrotain.createToken)({ name: "colour", pattern: /colour/i, longer_alt: Identifier });
-var ShapeEnum = (0, import_chevrotain.createToken)({ name: "shapeEnum", pattern: /Box|RoundedBox|Circle|Ellipse|Hexagon|Cylinder|Pipe|Person|Robot|Folder|WebBrowser|MobileDevicePortrait|MobileDeviceLandscape|Component/i, longer_alt: Identifier });
+var ShapeEnum = (0, import_chevrotain.createToken)({ name: "shapeEnum", pattern: /Box|RoundedBox|Circle|Ellipse|Hexagon|Diamond|Cylinder|Bucket|Pipe|Person|Robot|Folder|WebBrowser|Window|Terminal|Shell|MobileDevicePortrait|MobileDeviceLandscape|Component/i, longer_alt: Identifier });
 var FontSize = (0, import_chevrotain.createToken)({ name: "fontSize", pattern: /fontsize/i, longer_alt: Identifier });
 var Opacity = (0, import_chevrotain.createToken)({ name: "opacity", pattern: /opacity/i, longer_alt: Identifier });
 var Stroke = (0, import_chevrotain.createToken)({ name: "stroke", pattern: /stroke/i, longer_alt: Identifier });
@@ -302,6 +303,30 @@ var allTokens = [
   RBrace
 ];
 var StructurizrLexer = new import_chevrotain.Lexer(allTokens);
+
+// src/formatLexingErrors.ts
+var formatLocation = (error) => {
+  const parts = [];
+  if (error.line !== void 0) {
+    parts.push(`line ${error.line}`);
+  }
+  if (error.column !== void 0) {
+    parts.push(`column ${error.column}`);
+  }
+  if (error.offset !== void 0) {
+    parts.push(`offset ${error.offset}`);
+  }
+  if (error.length !== void 0) {
+    parts.push(`length ${error.length}`);
+  }
+  return parts.length > 0 ? ` (${parts.join(", ")})` : "";
+};
+var formatLexingErrors = (errors) => {
+  if (errors.length === 0) {
+    return "No lexing errors.";
+  }
+  return errors.map((error, index) => `${index + 1}. ${error.message}${formatLocation(error)}`).join("\n");
+};
 
 // src/Parser.ts
 var import_chevrotain2 = require("chevrotain");
@@ -1095,6 +1120,9 @@ var structurizrParser = class extends import_chevrotain2.CstParser {
       } },
       { ALT: () => {
         this.CONSUME(Person);
+      } },
+      { ALT: () => {
+        this.CONSUME(StringLiteral);
       } }
     ]);
     ;
@@ -2122,5 +2150,6 @@ var VSCodeVisitor = new vsCodeVisitor();
   Wildcard,
   Word,
   Workspace,
-  allTokens
+  allTokens,
+  formatLexingErrors
 });
