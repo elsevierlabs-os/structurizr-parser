@@ -84,6 +84,7 @@ export const FontSize = createToken({name: "fontSize", pattern: /fontsize/i, lon
 export const Opacity = createToken({name:"opacity", pattern: /opacity/i, longer_alt: Identifier});
 export const Stroke = createToken({name: "stroke", pattern: /stroke/i, longer_alt: Identifier});
 export const StrokeWidth = createToken({name: "strokeWidth", pattern: /strokeWidth/i, longer_alt: Identifier});
+export const Thickness = createToken({name: "thickness", pattern: /thickness/i, longer_alt: Identifier});
 export const LocalWorkspaceId = createToken({name: "localWorkspaceId", pattern: /"localWorkspaceId"|localWorkspaceId/i, longer_alt: Identifier });
 export const StructurizrLocale = createToken({name: "structurizrLocale", pattern: /"structurizr\.locale"|structurizr\.locale/i, longer_alt: Identifier });
 export const StructurizrTimezone = createToken({name: "structurizrTimezone", pattern: /"structurizr\.timezone"|structurizr\.timezone/i, longer_alt: Identifier });
@@ -205,6 +206,7 @@ export const allTokens = [
     Opacity,
     StrokeWidth,
     Stroke,
+    Thickness,
     Metadata,
 
     Equals,

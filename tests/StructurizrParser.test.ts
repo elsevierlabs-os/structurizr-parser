@@ -3,6 +3,7 @@ import { StructurizrParser } from '../src/Parser';
 import { createSyntaxDiagramsCode } from 'chevrotain';
 import { StructurizrLexer } from '../src/Lexer';
 import { describe, test, expect } from '@jest/globals';
+import { logParserErrors } from './logParserErrors';
 
 describe('Testing StructurizrParser', () => {
     test('Can generate syntax diagrams', async () => {
@@ -91,15 +92,3 @@ describe('Testing StructurizrParser', () => {
         expect(cst.name).toBe("workspaceWrapper");
     });
 });
-
-function logParserErrors() {
-    console.error(`Parser errors: ${StructurizrParser.errors.length}`);
-    StructurizrParser.errors.forEach((err, i) => {
-        console.error(
-            `[${i + 1}] ${err.message} ` +
-            `(token: ${err.token?.image ?? "N/A"}, ` +
-            `line: ${err.token?.startLine ?? "?"}, ` +
-            `col: ${err.token?.startColumn ?? "?"})`
-        );
-    });
-}

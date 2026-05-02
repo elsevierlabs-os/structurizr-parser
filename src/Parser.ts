@@ -1,5 +1,5 @@
 import { CstParser } from "chevrotain";
-import { Animation, AutoLayout, Background, BangImpliedRelationships, Bool, Color, Colour, Component, Container, ContainerInstance, Deployment, DeploymentEnvironment, DeploymentNode, Description, Dynamic, Element, Equals, Extends, FilePath, FontSize, Group, HexColor, Identifier, Image, Include, Int, LBrace, LocalWorkspaceId, Metadata, Model, Name, Opacity, Person, Properties, RBrace, RelatedTo, Relationship, Shape, ShapeEnum, SoftwareSystem, SoftwareSystemInstance, StringLiteral, Stroke, StrokeWidth, StructurizrDescription, StructurizrEnterpriseBoundary, StructurizrGroupSeparator, StructurizrGroups, StructurizrLocale, StructurizrMetadata, StructurizrSoftwareSystemBoundaries, StructurizrSort, StructurizrTimezone, StructurizrTitle, StructurizrTooltips, Styles, SystemContext, SystemLandscape, Tags, Theme, Title, Url, Value, Views, Wildcard, Word, Workspace, allTokens } from "./Lexer";
+import { Animation, AutoLayout, Background, BangImpliedRelationships, Bool, Color, Colour, Component, Container, ContainerInstance, Deployment, DeploymentEnvironment, DeploymentNode, Description, Dynamic, Element, Equals, Extends, FilePath, FontSize, Group, HexColor, Identifier, Image, Include, Int, LBrace, LocalWorkspaceId, Metadata, Model, Name, Opacity, Person, Properties, RBrace, RelatedTo, Relationship, Shape, ShapeEnum, SoftwareSystem, SoftwareSystemInstance, StringLiteral, Stroke, StrokeWidth, StructurizrDescription, StructurizrEnterpriseBoundary, StructurizrGroupSeparator, StructurizrGroups, StructurizrLocale, StructurizrMetadata, StructurizrSoftwareSystemBoundaries, StructurizrSort, StructurizrTimezone, StructurizrTitle, StructurizrTooltips, Styles, SystemContext, SystemLandscape, Tags, Theme, Thickness, Title, Url, Value, Views, Wildcard, Word, Workspace, allTokens } from "./Lexer";
 
 // This class takes all the tokens identified and parses the DSL according to the rulesets defined by the Structurizr schema
 
@@ -298,7 +298,8 @@ class structurizrParser extends CstParser {
       this.OR([
         {ALT: () => {this.SUBRULE(this.componentGroupSection)}},
         {ALT: () => {this.SUBRULE(this.componentSection)}},
-        {ALT: () => {this.SUBRULE(this.implicitRelationship)}}
+        {ALT: () => {this.SUBRULE(this.implicitRelationship)}},
+        {ALT: () => {this.SUBRULE(this.tagsAttribute)}}
       ]);
     });
     this.CONSUME1(RBrace);
@@ -635,13 +636,14 @@ class structurizrParser extends CstParser {
 
   private relationshipStyleSection = this.RULE("relationshipStyleSection", () => {
     this.CONSUME(Relationship);
-    this.CONSUME(Identifier);
+    this.CONSUME(StringLiteral);
     this.CONSUME(LBrace);
     this.MANY(() => {
       this.OR([
         {ALT: () => {this.SUBRULE(this.backgroundStyle)}},
         {ALT: () => {this.SUBRULE(this.colorStyle)}},
-        {ALT: () => {this.SUBRULE(this.colourStyle)}}
+        {ALT: () => {this.SUBRULE(this.colourStyle)}},
+        {ALT: () => {this.SUBRULE(this.thicknessStyle)}}
       ]);
     });
     this.CONSUME(RBrace);
@@ -680,7 +682,12 @@ class structurizrParser extends CstParser {
   private strokeWidthStyle = this.RULE("strokeWidthStyle", () => {
     this.CONSUME(StrokeWidth);
     this.CONSUME(Int);
-  });  
+  });
+
+  private thicknessStyle = this.RULE("thicknessStyle", () => {
+    this.CONSUME(Thickness);
+    this.CONSUME(Int);
+  });
 
   private fontStyle = this.RULE("fontStyle", () => {
     this.CONSUME(FontSize);
