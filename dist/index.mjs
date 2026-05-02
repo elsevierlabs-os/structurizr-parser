@@ -1776,7 +1776,7 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     this._debug && console.log(`Here we are at metadataStyle with node: ${node.name}`);
   }
   thicknessStyle(node, rs) {
-    rs.thickness = node.int[0].image;
+    rs.thickness = Number(node.int[0].image);
   }
   findSourceEntity(s_id) {
     let p = this.workspace.model?.people?.find((pr) => pr.id === s_id);
