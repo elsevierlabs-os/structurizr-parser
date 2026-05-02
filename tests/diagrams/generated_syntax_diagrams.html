@@ -3293,10 +3293,10 @@
       },
       {
         "type": "Terminal",
-        "name": "identifier",
-        "label": "identifier",
+        "name": "stringLiteral",
+        "label": "stringLiteral",
         "idx": 0,
-        "pattern": "[a-zA-Z_0-9]+"
+        "pattern": "\"(?:[^\"\\\\]|\\\\.)*\""
       },
       {
         "type": "Terminal",
@@ -3339,6 +3339,16 @@
                   {
                     "type": "NonTerminal",
                     "name": "colourStyle",
+                    "idx": 0
+                  }
+                ]
+              },
+              {
+                "type": "Alternative",
+                "definition": [
+                  {
+                    "type": "NonTerminal",
+                    "name": "thicknessStyle",
                     "idx": 0
                   }
                 ]
@@ -3507,6 +3517,27 @@
         "label": "strokeWidth",
         "idx": 0,
         "pattern": "strokeWidth"
+      },
+      {
+        "type": "Terminal",
+        "name": "int",
+        "label": "int",
+        "idx": 0,
+        "pattern": "-?(?:0|[1-9][0-9]*)"
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "thicknessStyle",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "thickness",
+        "label": "thickness",
+        "idx": 0,
+        "pattern": "thickness"
       },
       {
         "type": "Terminal",

@@ -464,6 +464,12 @@ class rawInterpreter extends BaseStructurizrVisitor {
             }
             for (const es of node.elementStyleSection) { this.visit(es)}; 
         }
+        if (node.relationshipStyleSection) {
+            if (!this.workspace.views?.configuration.styles.relationships) {
+                this.workspace.views!.configuration.styles.relationships = [];
+            }
+            for (const rs of node.relationshipStyleSection) { this.visit(rs)}; 
+        }
     }
 
     elementStyleSection(node: any) {
@@ -485,6 +491,11 @@ class rawInterpreter extends BaseStructurizrVisitor {
 
     relationshipStyleSection(node: any) {
         this._debug && console.log(`Here we are at relationshipStyleSection with node: ${node.name}`);
+        const rs = {} as components["schemas"]["RelationshipStyle"];
+        rs.tag = stripQuotes(node.stringLiteral[0].image ?? "");
+        // We MUST pass rs to the style handlers here and that avoids the whole stupid children issue
+        if (node.thicknessStyle){ this.visit(node.thicknessStyle, rs); }
+        this.workspace.views?.configuration?.styles?.relationships?.push(rs);
     }
 
     shapeStyle(node: any, es: components["schemas"]["ElementStyle"]) {
@@ -510,7 +521,7 @@ class rawInterpreter extends BaseStructurizrVisitor {
     
     strokeWidthStyle(node: any, es: components["schemas"]["ElementStyle"]) {
         es.strokeWidth = node.int[0].image;
-    }     
+    }  
 
     fontStyle(node: any, es: components["schemas"]["ElementStyle"]) {
         es.fontSize = node.int[0].image;
@@ -528,6 +539,10 @@ class rawInterpreter extends BaseStructurizrVisitor {
     metadataStyle(node: any, es: components["schemas"]["ElementStyle"]) {
         this._debug && console.log(`Here we are at metadataStyle with node: ${node.name}`);
         // es.metadata = stripQuotes(node.bool[0].image ?? "");
+    }  
+    
+    thicknessStyle(node: any, rs: components["schemas"]["RelationshipStyle"]) {
+        rs.thickness = node.int[0].image;
     }    
 
     findSourceEntity(s_id: string) {

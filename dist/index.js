@@ -105,6 +105,7 @@ __export(src_exports, {
   Terminology: () => Terminology,
   Theme: () => Theme,
   Themes: () => Themes,
+  Thickness: () => Thickness,
   Title: () => Title,
   Url: () => Url,
   Users: () => Users,
@@ -186,6 +187,7 @@ var FontSize = (0, import_chevrotain.createToken)({ name: "fontSize", pattern: /
 var Opacity = (0, import_chevrotain.createToken)({ name: "opacity", pattern: /opacity/i, longer_alt: Identifier });
 var Stroke = (0, import_chevrotain.createToken)({ name: "stroke", pattern: /stroke/i, longer_alt: Identifier });
 var StrokeWidth = (0, import_chevrotain.createToken)({ name: "strokeWidth", pattern: /strokeWidth/i, longer_alt: Identifier });
+var Thickness = (0, import_chevrotain.createToken)({ name: "thickness", pattern: /thickness/i, longer_alt: Identifier });
 var LocalWorkspaceId = (0, import_chevrotain.createToken)({ name: "localWorkspaceId", pattern: /"localWorkspaceId"|localWorkspaceId/i, longer_alt: Identifier });
 var StructurizrLocale = (0, import_chevrotain.createToken)({ name: "structurizrLocale", pattern: /"structurizr\.locale"|structurizr\.locale/i, longer_alt: Identifier });
 var StructurizrTimezone = (0, import_chevrotain.createToken)({ name: "structurizrTimezone", pattern: /"structurizr\.timezone"|structurizr\.timezone/i, longer_alt: Identifier });
@@ -289,6 +291,7 @@ var allTokens = [
   Opacity,
   StrokeWidth,
   Stroke,
+  Thickness,
   Metadata,
   Equals,
   RelatedTo,
@@ -671,6 +674,9 @@ var structurizrParser = class extends import_chevrotain2.CstParser {
         } },
         { ALT: () => {
           this.SUBRULE(this.implicitRelationship);
+        } },
+        { ALT: () => {
+          this.SUBRULE(this.tagsAttribute);
         } }
       ]);
     });
@@ -1095,7 +1101,7 @@ var structurizrParser = class extends import_chevrotain2.CstParser {
   });
   relationshipStyleSection = this.RULE("relationshipStyleSection", () => {
     this.CONSUME(Relationship);
-    this.CONSUME(Identifier);
+    this.CONSUME(StringLiteral);
     this.CONSUME(LBrace);
     this.MANY(() => {
       this.OR([
@@ -1107,6 +1113,9 @@ var structurizrParser = class extends import_chevrotain2.CstParser {
         } },
         { ALT: () => {
           this.SUBRULE(this.colourStyle);
+        } },
+        { ALT: () => {
+          this.SUBRULE(this.thicknessStyle);
         } }
       ]);
     });
@@ -1145,6 +1154,10 @@ var structurizrParser = class extends import_chevrotain2.CstParser {
   });
   strokeWidthStyle = this.RULE("strokeWidthStyle", () => {
     this.CONSUME(StrokeWidth);
+    this.CONSUME(Int);
+  });
+  thicknessStyle = this.RULE("thicknessStyle", () => {
+    this.CONSUME(Thickness);
     this.CONSUME(Int);
   });
   fontStyle = this.RULE("fontStyle", () => {
@@ -1222,7 +1235,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     this._debug = flag;
   }
   workspaceWrapper(node) {
-    this._debug && console.log("Here we are at workspaceWrapper node:");
     this.workspace = {};
     this.workspace.name = "Name";
     this.workspace.description = "Description";
@@ -1232,7 +1244,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     return this.workspace;
   }
   workspaceSection(node) {
-    this._debug && console.log("Here we are at workspaceSection node:");
     if (node.name) {
       this.workspace.name = node.stringLiteral[0]?.image;
     }
@@ -1252,7 +1263,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     }
   }
   modelSection(node) {
-    this._debug && console.log("Here we are at modelSection node:");
     this.workspace.model = {};
     this.workspace.model.people = [];
     this.workspace.model.softwareSystems = [];
@@ -1262,7 +1272,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     }
   }
   modelChildSection(node) {
-    this._debug && console.log("Here we are at modelChildSection node:");
     if (node.propertiesSection) {
       this.visit(node.propertiesSection);
     }
@@ -1296,7 +1305,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
   // TODO: And change the parser to identify the property names and fail if not aligned
   // TODO: This will mean a lot more handlers for each property and whether it is model or view related
   propertiesSection(node) {
-    this._debug && console.log("Here we are at propertiesSection node:");
     if (node.localeProperty) {
       this.visit(node.localeProperty);
     }
@@ -1359,7 +1367,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     this._debug && console.log("Here we are at enterpriseBoundaryProperty node:");
   }
   groupSeparatorProperty(node) {
-    this._debug && console.log("Here we are at groupSeparatorProperty node:");
     const value = stripQuotes(node.stringLiteral?.[0]?.image);
     if (!this.workspace.model?.properties) {
       this.workspace.model.properties = {};
@@ -1374,7 +1381,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     this._debug && console.log("Here we are at softwareSystemBoundariesProperty node:");
   }
   localWorkspaceIdProperty(node) {
-    this._debug && console.log("Here we are at localWorkspaceIdProperty node:");
     const value = stripQuotes(node.stringLiteral?.[0]?.image);
     if (!this.workspace.properties) {
       this.workspace.properties = {};
@@ -1382,7 +1388,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     this.workspace.properties["localWorkspaceId"] = value;
   }
   systemGroupSection(node) {
-    this._debug && console.log("Here we are at systemGroupSection node:");
     const groupName = stripQuotes(node.stringLiteral?.[0]?.image ?? "");
     this._systemGroup.push(groupName);
     if (node.systemGroupChildSection) {
@@ -1391,7 +1396,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     this._systemGroup.pop();
   }
   systemGroupChildSection(node) {
-    this._debug && console.log("Here we are at systemGroupChildSection with node:");
     if (node.systemGroupSection) {
       for (const group of node.systemGroupSection) {
         this.visit(group);
@@ -1409,7 +1413,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     }
   }
   personSection(node) {
-    this._debug && console.log("Here we are at personSection node:");
     const id = node.identifier[0].image;
     const name = stripQuotes(node.stringLiteral[0]?.image ?? "");
     const description = stripQuotes(node.stringLiteral[1]?.image ?? "");
@@ -1425,7 +1428,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     }
   }
   personChildSection(node, person) {
-    this._debug && console.log(`Here we are at personChildSection node:`);
     if (node.descriptionAttribute) {
       this.visit(node.descriptionAttribute, person);
     }
@@ -1439,7 +1441,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     }
   }
   softwareSystemSection(node) {
-    this._debug && console.log("Here we are at softwareSystemSection node:");
     const id = node.identifier[0].image;
     const name = stripQuotes(node.stringLiteral[0]?.image ?? "");
     const description = stripQuotes(node.stringLiteral[1]?.image ?? "");
@@ -1459,7 +1460,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     }
   }
   softwareSystemChildSection(node, system) {
-    this._debug && console.log(`Here we are at softwareSystemChildSection with node: ${system.name}`);
     if (node.descriptionAttribute) {
       this.visit(node.descriptionAttribute, system);
     }
@@ -1473,19 +1473,16 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     }
   }
   descriptionAttribute(node, entity) {
-    this._debug && console.log(`Here we are at descriptionAttribute with node: ${node.name}`);
     const desc = stripQuotes(node.stringLiteral?.[0]?.image ?? "");
     entity.description = desc;
   }
   tagsAttribute(node, entity) {
-    this._debug && console.log(`Here we are at tagsAttribute with node: ${node.name}`);
     for (const tag of node.stringLiteral) {
       const newTag = stripQuotes(tag.image);
       entity.tags = entity.tags ? `${entity.tags},${newTag}` : newTag;
     }
   }
   containerGroupSection(node) {
-    this._debug && console.log(`Here we are at containerGroupSection with node: ${node.name}`);
     const groupName = stripQuotes(node.stringLiteral?.[0]?.image ?? "");
     this._containerGroup.push(groupName);
     if (node.containerGroupChildSection) {
@@ -1497,7 +1494,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     this._debug && console.log(`Here we are at containerGroupChildSection with node: ${node.name}`);
   }
   containerSection(node, system) {
-    this._debug && console.log(`Here we are at ContainerSection with node: ${node.name}`);
     const id = node.identifier[0].image;
     const name = stripQuotes(node.stringLiteral[0]?.image ?? "");
     const description = stripQuotes(node.stringLiteral[1]?.image ?? "");
@@ -1519,7 +1515,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     }
   }
   containerChildSection(node, container) {
-    this._debug && console.log(`Here we are at ContainerChildSection with node: ${node.name}`);
     if (node.componentSection) {
       for (const com of node.componentSection) {
         this.visit(com, container);
@@ -1527,7 +1522,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     }
   }
   componentGroupSection(node) {
-    this._debug && console.log(`Here we are at componentGroupSection with node: ${node.name}`);
     const groupName = stripQuotes(node.stringLiteral?.[0]?.image ?? "");
     this._componentGroup.push(groupName);
     if (node.componentGroupChildSection) {
@@ -1539,7 +1533,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     this._debug && console.log(`Here we are at componentGroupChildSection with node: ${node.name}`);
   }
   componentSection(node, container) {
-    this._debug && console.log(`Here we are at ComponentSection with node: ${node.name}`);
     const id = node.identifier[0].image;
     const name = stripQuotes(node.stringLiteral[0]?.image ?? "");
     const description = stripQuotes(node.stringLiteral[1]?.image ?? "");
@@ -1557,7 +1550,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     container.components?.push(c);
   }
   explicitRelationship(node) {
-    this._debug && console.log("Here we are at explicitRelationship node:");
     const s_id = node.identifier[0].image;
     const t_id = node.identifier[1].image;
     const desc = node.stringLiteral?.[0]?.image ?? "";
@@ -1593,7 +1585,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     this._debug && console.log(`Here we are at softwareSystemInstanceSection with node: ${node.name}`);
   }
   viewsSection(node) {
-    this._debug && console.log("Here we are at viewsSection node:");
     if (!this.workspace.views) {
       this.workspace.views = {};
     }
@@ -1602,7 +1593,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     }
   }
   viewsChildSection(node) {
-    this._debug && console.log("Here we are at viewsChildSection node:");
     if (node.systemLandscapeView) {
       for (const view of node.systemLandscapeView) {
         this.visit(view);
@@ -1648,7 +1638,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     }
   }
   systemLandscapeView(node) {
-    this._debug && console.log(`Here we are at systemLandscapeView with node: ${node.name}`);
     this._currentView = 1 /* SystemLandscape */;
     if (!this.workspace.views?.systemLandscapeViews) {
       this.workspace.views.systemLandscapeViews = [];
@@ -1664,7 +1653,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     }
   }
   viewOptions(node, view) {
-    this._debug && console.log("Here we are at viewOptions node:");
     if (node.includeOptions) {
       for (const inc of node.includeOptions) {
         this.visit(inc, view);
@@ -1681,7 +1669,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     }
   }
   includeOptions(node, view) {
-    this._debug && console.log("Here we are at includeOptions node:");
     if (!view.elements) {
       view.elements = [];
     }
@@ -1695,7 +1682,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     }
   }
   autoLayoutOptions(node, view) {
-    this._debug && console.log("Here we are at autoLayoutOptions node:");
     if (!view.automaticLayout) {
       view.automaticLayout = {};
     }
@@ -1728,7 +1714,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     this._debug && console.log(`Here we are at descriptionOptions with node: ${node.name}`);
   }
   propertiesOptions(node) {
-    this._debug && console.log(`Here we are at propertiesOptions with node: ${node.name}`);
     if (node.localeProperty) {
       this.visit(node.localeProperty);
     }
@@ -1764,7 +1749,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     }
   }
   systemContextView(node) {
-    this._debug && console.log("Here we are at systemContextView node:");
     this._currentView = 2 /* SystemContext */;
     if (!this.workspace.views?.systemContextViews) {
       this.workspace.views.systemContextViews = [];
@@ -1782,35 +1766,30 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     }
   }
   containerView(node) {
-    this._debug && console.log(`Here we are at containerView with node: ${node.name}`);
     this._currentView = 3 /* Container */;
     if (!this.workspace.views?.containerViews) {
       this.workspace.views.containerViews = [];
     }
   }
   componentView(node) {
-    this._debug && console.log(`Here we are at componentView with node: ${node.name}`);
     this._currentView = 4 /* Component */;
     if (!this.workspace.views?.componentViews) {
       this.workspace.views.componentViews = [];
     }
   }
   imageSection(node) {
-    this._debug && console.log(`Here we are at imageSection with node: ${node.name}`);
     this._currentView = 9 /* Image */;
     if (!this.workspace.views?.imageViews) {
       this.workspace.views.imageViews = [];
     }
   }
   dynamicSection(node) {
-    this._debug && console.log(`Here we are at dynamicSection with node: ${node.name}`);
     this._currentView = 6 /* Dynamic */;
     if (!this.workspace.views?.dynamicViews) {
       this.workspace.views.dynamicViews = [];
     }
   }
   deploymentSection(node) {
-    this._debug && console.log(`Here we are at deploymentSection with node: ${node.name}`);
     this._currentView = 7 /* Deployment */;
     if (!this.workspace.views?.deploymentViews) {
       this.workspace.views.deploymentViews = [];
@@ -1820,7 +1799,6 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
     this._debug && console.log(`Here we are at themeSection with node: ${node.name}`);
   }
   stylesSection(node) {
-    this._debug && console.log(`Here we are at stylesSection with node: ${node.name}`);
     if (!this.workspace.views?.configuration) {
       this.workspace.views.configuration = {};
     }
@@ -1836,9 +1814,17 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
       }
       ;
     }
+    if (node.relationshipStyleSection) {
+      if (!this.workspace.views?.configuration.styles.relationships) {
+        this.workspace.views.configuration.styles.relationships = [];
+      }
+      for (const rs of node.relationshipStyleSection) {
+        this.visit(rs);
+      }
+      ;
+    }
   }
   elementStyleSection(node) {
-    this._debug && console.log(`Here we are at elementStyleSection with node: ${node.name}`);
     const es = {};
     es.tag = stripQuotes(node.stringLiteral[0].image ?? "");
     if (node.shapeStyle) {
@@ -1875,36 +1861,35 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
   }
   relationshipStyleSection(node) {
     this._debug && console.log(`Here we are at relationshipStyleSection with node: ${node.name}`);
+    const rs = {};
+    rs.tag = stripQuotes(node.stringLiteral[0].image ?? "");
+    if (node.thicknessStyle) {
+      this.visit(node.thicknessStyle, rs);
+    }
+    this.workspace.views?.configuration?.styles?.relationships?.push(rs);
   }
   shapeStyle(node, es) {
     this._debug && console.log(`Here we are at shapeStyle with node: ${node.name}`);
   }
   backgroundStyle(node, es) {
-    this._debug && console.log(`Here we are at backgroundStyle with node: ${node.name}`);
     es.background = stripQuotes(node.hexColor[0].image ?? "");
   }
   colorStyle(node, es) {
-    this._debug && console.log(`Here we are at colorStyle with node: ${node.name}`);
     es.color = stripQuotes(node.hexColor[0].image ?? "");
   }
   colourStyle(node, es) {
-    this._debug && console.log(`Here we are at colourStyle with node: ${node.name}`);
     es.color = stripQuotes(node.hexColor[0].image ?? "");
   }
   strokeStyle(node, es) {
-    this._debug && console.log(`Here we are at strokeStyle with node: ${node.name}`);
     es.stroke = stripQuotes(node.hexColor[0].image ?? "");
   }
   strokeWidthStyle(node, es) {
-    this._debug && console.log(`Here we are at strokeWidthStyle with node: ${node.name}`);
     es.strokeWidth = node.int[0].image;
   }
   fontStyle(node, es) {
-    this._debug && console.log(`Here we are at fontStyle with node: ${node.name}`);
     es.fontSize = node.int[0].image;
   }
   opacityStyle(node, es) {
-    this._debug && console.log(`Here we are at opacityStyle with node: ${node.name}`);
     es.opacity = node.int[0].image;
   }
   descriptionStyle(node, es) {
@@ -1912,6 +1897,9 @@ var rawInterpreter = class extends BaseStructurizrVisitor {
   }
   metadataStyle(node, es) {
     this._debug && console.log(`Here we are at metadataStyle with node: ${node.name}`);
+  }
+  thicknessStyle(node, rs) {
+    rs.thickness = node.int[0].image;
   }
   findSourceEntity(s_id) {
     let p = this.workspace.model?.people?.find((pr) => pr.id === s_id);
@@ -2140,6 +2128,7 @@ var VSCodeVisitor = new vsCodeVisitor();
   Terminology,
   Theme,
   Themes,
+  Thickness,
   Title,
   Url,
   Users,

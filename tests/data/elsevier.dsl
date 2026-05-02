@@ -55,9 +55,4 @@ workspace {
         # The rationale for this restriction is to ensure that C4 diagrams are consistent across all workspaces in the C4 Server.
         theme https://c4-server-static-assets.develop.nonprod.scopus.elsevier.systems/theme.json        
     }
-
-    configuration {
-        scope softwaresystem
-    }
-
 }
