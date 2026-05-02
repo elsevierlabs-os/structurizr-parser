@@ -542,7 +542,7 @@ class rawInterpreter extends BaseStructurizrVisitor {
     }  
     
     thicknessStyle(node: any, rs: components["schemas"]["RelationshipStyle"]) {
-        rs.thickness = node.int[0].image;
+        rs.thickness = Number(node.int[0].image);
     }    
 
     findSourceEntity(s_id: string) {
