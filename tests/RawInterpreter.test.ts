@@ -5,7 +5,6 @@ import { RawInterpreter } from '../src/RawInterpreter';
 import { components } from '../src/structurizr.schema';
 import { describe, test, expect } from '@jest/globals';
 import { logParserErrors } from './logParserErrors';
-import { log } from 'console';
 
 describe('Testing RawInterpreter', () => {
     test('Can RAW interpret getting started dsl', async() => {
