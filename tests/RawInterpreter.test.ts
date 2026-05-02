@@ -87,7 +87,7 @@ describe('Testing RawInterpreter', () => {
         const cst = StructurizrParser.workspaceWrapper();
         if (StructurizrParser.errors.length > 0) {
             logParserErrors();
-        };      
+        }
         expect(StructurizrParser.errors.length).toBe(0);
         expect(cst.name).toBe("workspaceWrapper");
         const c4wspace = RawInterpreter.visit(cst) as components["schemas"]["Workspace"];
